@@ -1,0 +1,178 @@
+
+.preview {
+     width: 300px;
+     height: 200px;
+     box-shadow: 0px 0px 12px rgba(0,255,255,0.5);
+     border: 1px solid rgba(127,255,255,0.25);
+     cursor: default;
+ }
+
+.preview:hover {
+    box-shadow: 0px 0px 12px rgba(0,255,255,0.75);
+    border: 1px solid rgba(127,255,255,0.75);
+}
+
+.preview .symbol {
+    width: 300px;
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+    color: rgba(255,255,255,0.75);
+    text-shadow: 0 0 10px rgba(0,255,255,0.95);
+}
+
+.mainview {
+    width: 800px;
+    height: 600px;
+    box-shadow: 0px 0px 12px rgba(0,255,255,0.5);
+    border: 1px solid rgba(127,255,255,0.25);
+    cursor: default;
+    overflow: auto;
+}
+
+.mainview:hover {
+    box-shadow: 0px 0px 12px rgba(0,255,255,0.75);
+    border: 1px solid rgba(127,255,255,0.75);
+}
+
+.mainview .symbol {
+    width: 700px;
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+    color: rgba(255,255,255,0.75);
+    text-shadow: 0 0 10px rgba(0,255,255,0.95);
+}
+
+.comment {
+    width: 400px;
+    height: 75px;
+}
+
+.comment_input {
+    margin-left : 10px;
+    margin-top : 5px;
+    width: 400px;
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+    color: rgba(255,255,255,0.75);
+    text-shadow: 0 0 10px rgba(0,255,255,0.95);
+    box-shadow: 0px 0px 12px rgba(0,255,255,0.5);
+    background-color: transparent;
+    border: 1px solid rgba(127,255,255,0.25);
+    word-wrap:break-word;
+}
+
+.comment .picture {
+    position : absolute;
+    top : 10px;
+    left : 10px;
+
+    width : 75px;
+    height : 75px;
+
+    font-weight: bold;
+    text-align: center;
+    box-shadow: 0px 0px 12px rgba(0,255,255,0.5);
+    border: 1px solid rgba(127,255,255,0.25);
+
+    background-color: rgba(0,0,0,0.8);
+    color: rgba(255,255,255,0.75);
+    text-shadow: 0 0 10px rgba(0,255,255,0.95);
+}
+
+.comment .name {
+    position : absolute;
+    top : 95px;
+    left : 10px;
+
+    width : 75px;
+    height : 15px;
+
+    font-weight: bold;
+    text-align: center;
+    box-shadow: 0px 0px 12px rgba(0,255,255,0.5);
+    border: 1px solid rgba(127,255,255,0.25);
+
+    background-color: rgba(0,0,0,0.8);
+
+    color: rgba(255,255,255,0.75);
+    text-shadow: 0 0 10px rgba(0,255,255,0.95);
+}
+
+.comment .content {
+    position : absolute;
+    top : 10px;
+    left : 95px;
+
+    width : 300px;
+    height : 100px;
+
+    box-shadow: 0px 0px 12px rgba(0,255,255,0.5);
+    border: 1px solid rgba(127,255,255,0.25);
+    word-wrap:break-word;
+    cursor: default;
+
+    background-color: rgba(0,0,0,0.8);
+
+    color: rgba(255,255,255,0.75);
+    text-shadow: 0 0 10px rgba(0,255,255,0.95);
+}
+
+.progress {
+    width : 450px;
+    height : 30px;
+    color: rgba(255,255,255,0.75);
+    box-shadow: 0px 0px 12px rgba(0,255,255,0.5);
+    background-color: transparent;
+    border: 1px solid rgba(127,255,255,0.25);
+}
+
+.progress .key_text {
+    margin-left : 10px;
+    margin-top : 5px;
+    width : 300px;
+    font-size: 15px;
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(0,255,255,0.95);
+}
+
+.profile_picture {
+    width : 100px;
+    height : 100px;
+    box-shadow: 0px 0px 12px rgba(0,255,255,0.5);
+    border: 1px solid rgba(127,255,255,0.25);
+}
+
+.profile_back {
+    width : 400px;
+    height : 720px;
+    background-color: rgba(0,0,0,0.8);
+    box-shadow: 0px 0px 12px rgba(0,255,255,0.5);
+    border: 1px solid rgba(127,255,255,0.25);
+}
+
+.profile_content {
+    width : 200px;
+    height : 25px;
+    box-shadow: 0px 0px 12px rgba(0,255,255,0.5);
+    border: 1px solid rgba(127,255,255,0.25);
+    color: rgba(255,255,255,0.75);
+    font-size: 15px;
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(0,255,255,0.95);
+}
+
+.friend {
+    padding-top : 5px;
+    padding-left : 10px;
+    width : 100px;
+    height : 20px;
+    box-shadow: 0px 0px 12px rgba(127,0,0,0.5);
+    border: 1px solid rgba(127,255,255,0.25);
+    color: rgba(255,255,255,0.75);
+    font-size: 15px;
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(0,255,255,0.95);
+}

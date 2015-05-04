@@ -1,0 +1,290 @@
+body {
+    margin-left : 0px;
+    margin-top : 0px;
+    background-color: black;
+}
+
+.alert {
+    padding: 10px;
+    height: 50px;
+    box-shadow: 0px 0px 12px rgba(0,255,255,0.5);
+    border: 1px solid rgba(127,255,255,0.25);
+    cursor: default;
+}
+
+.alert:hover {
+    box-shadow: 0px 0px 12px rgba(0,255,255,0.75);
+    border: 1px solid rgba(127,255,255,0.75);
+}
+
+.alert .msg {
+    font-size: 35px;
+    font-weight: bold;
+    text-align: center;
+    color: rgba(255,255,255,0.75);
+    text-shadow: 0 0 10px rgba(0,255,255,0.95);
+}
+
+.element_below {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+}
+
+.element_below .main {
+    width: 200px;
+    height: 200px;
+
+    box-shadow: 0px 0px 12px rgba(0,255,255,0.5);
+    border: 1px solid rgba(127,255,255,0.25);
+
+    cursor: default;
+    border-radius: 50%;
+}
+
+.element_below .main:hover {
+    box-shadow: 0px 0px 12px rgba(0,255,255,0.75);
+    border: 1px solid rgba(127,255,255,0.75);
+}
+
+.element_below .shadow {
+    position:absolute;
+    left:20px;
+    top:20px;
+
+    width: 160px;
+    height: 160px;
+
+    box-shadow: 0px 0px 12px rgba(0,255,255,0.5);
+    border: 1px solid rgba(127,255,255,0.25);
+
+    border-radius: 50%;
+    background-color: #000000;
+}
+
+.power {
+    width: 100px;
+    height: 100px;
+    box-shadow: 0px 0px 12px rgba(0,255,255,0.5);
+    border: 1px solid rgba(127,255,255,0.25);
+    text-align: center;
+    cursor: default;
+    border-radius: 50%;
+}
+
+.power:hover {
+    box-shadow: 0px 0px 12px rgba(0,255,255,0.75);
+    border: 1px solid rgba(127,255,255,0.75);
+}
+
+.power .symbol {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    font-size: 60px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.75);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.95);
+}
+
+.list_detail {
+    width: 100px;
+    height: 20px;
+    box-shadow: 0px 0px 12px rgba(0,255,255,0.5);
+    border: 1px solid rgba(127,255,255,0.25);
+    cursor: default;
+}
+
+.list_detail:hover {
+    box-shadow: 0px 0px 12px rgba(0,255,255,0.75);
+    border: 1px solid rgba(127,255,255,0.75);
+}
+
+.list_detail .symbol {
+    width: 100px;
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+    color: rgba(255,255,255,0.75);
+    text-shadow: 0 0 10px rgba(0,255,255,0.95);
+}
+
+.preview_l {
+    width: 200px;
+    height: 100px;
+    box-shadow: 0px 0px 12px rgba(0,255,255,0.5);
+    border: 1px solid rgba(127,255,255,0.25);
+    cursor: default;
+}
+
+.preview_l:hover {
+    box-shadow: 0px 0px 12px rgba(0,255,255,0.75);
+    border: 1px solid rgba(127,255,255,0.75);
+}
+
+.preview_l .symbol {
+    width: 200px;
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+    color: rgba(255,255,255,0.75);
+    text-shadow: 0 0 10px rgba(0,255,255,0.95);
+}
+
+.cube_face {
+    width: 100px;
+    height: 100px;
+    box-shadow: 0px 0px 12px rgba(0,255,255,0.5);
+    border: 1px solid rgba(127,255,255,0.25);
+    cursor: default;
+}
+
+.cube_face:hover {
+    box-shadow: 0px 0px 12px rgba(0,255,255,0.75);
+    border: 1px solid rgba(127,255,255,0.75);
+}
+
+.cube_face .symbol {
+    width: 100px;
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+    color: rgba(255,255,255,0.75);
+    text-shadow: 0 0 10px rgba(0,255,255,0.95);
+}
+
+.main_view {
+    width: 800px;
+    height: 400px;
+    box-shadow: 0px 0px 12px rgba(0,255,255,0.5);
+    border: 1px solid rgba(127,255,255,0.25);
+    cursor: default;
+}
+
+.main_view:hover {
+    box-shadow: 0px 0px 12px rgba(0,255,255,0.75);
+    border: 1px solid rgba(127,255,255,0.75);
+}
+
+.main_view .symbol {
+    width: 800px;
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+    color: rgba(255,255,255,0.75);
+    text-shadow: 0 0 10px rgba(0,255,255,0.95);
+}
+
+.fullscreen_but {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
+.thumnail_view {
+    width: 300px;
+    height: 200px;
+    box-shadow: 0px 0px 12px rgba(0,255,255,0.5);
+    border: 1px solid rgba(127,255,255,0.25);
+    cursor: default;
+}
+
+.thumnail_view:hover {
+    box-shadow: 0px 0px 12px rgba(0,255,255,0.75);
+    border: 1px solid rgba(127,255,255,0.75);
+}
+
+.thumnail_view .symbol {
+    width: 300px;
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+    color: rgba(255,255,255,0.75);
+    text-shadow: 0 0 10px rgba(0,255,255,0.95);
+}
+
+.keyword_list {
+    width: 340px;
+    height: 40px;
+    box-shadow: 0px 0px 12px rgba(0,255,255,0.5);
+    border: 1px solid rgba(127,255,255,0.25);
+    cursor: default;
+}
+
+.keyword_list:hover {
+    box-shadow: 0px 0px 12px rgba(0,255,255,0.75);
+    border: 1px solid rgba(127,255,255,0.75);
+}
+
+.keyword_list .symbol {
+    width: 340px;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: left;
+    margin-left: 10px;
+    color: rgba(255,255,255,0.75);
+    text-shadow: 0 0 10px rgba(0,255,255,0.95);
+}
+
+.reply_pic {
+    width: 60px;
+    height: 60px;
+    box-shadow: 0px 0px 12px rgba(0,255,255,0.5);
+    border: 1px solid rgba(127,255,255,0.25);
+    cursor: default;
+}
+
+.reply_pic:hover {
+    box-shadow: 0px 0px 12px rgba(0,255,255,0.75);
+    border: 1px solid rgba(127,255,255,0.75);
+}
+
+.reply_pic .symbol {
+    width: 60px;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    color: rgba(255,255,255,0.75);
+    text-shadow: 0 0 10px rgba(0,255,255,0.95);
+}
+
+.reply_content {
+    width: 340px;
+    height: 100px;
+    box-shadow: 0px 0px 12px rgba(0,255,255,0.5);
+    border: 1px solid rgba(127,255,255,0.25);
+    cursor: default;
+}
+
+.reply_content:hover {
+    box-shadow: 0px 0px 12px rgba(0,255,255,0.75);
+    border: 1px solid rgba(127,255,255,0.75);
+}
+
+.reply_content .symbol {
+    width: 340px;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: left;
+    margin-left: 10px;
+    color: rgba(255,255,255,0.75);
+    text-shadow: 0 0 10px rgba(0,255,255,0.95);
+}
+
+.status {
+    width: 200px;
+    height: 120px;
+
+    box-shadow: 0px 0px 12px rgba(0,255,255,0.5);
+    border: 1px solid rgba(127,255,255,0.25);
+}
+
+.status .symbol {
+    width: 200px;
+    font-size: 10px;
+    font-weight: bold;
+    text-align: center;
+    color: rgba(255,255,255,0.75);
+    text-shadow: 0 0 10px rgba(0,255,255,0.95);
+}

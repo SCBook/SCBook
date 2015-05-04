@@ -1,0 +1,82 @@
+.element {
+    width: 300px;
+    height: 500px;
+    box-shadow: 0px 0px 12px rgba(0,255,255,0.5);
+    border: 1px solid rgba(127,255,255,0.25);
+    text-align: center;
+    cursor: default;
+}
+
+.element .blank_big {
+    width: 300px;
+    height: 200px;
+}
+
+.element .input {
+    width:300px;
+    height:50px;
+}
+
+.element .input .text {
+    width: 280px;
+    height: 30px;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    color: rgba(255,255,255,0.75);
+    text-shadow: 0 0 10px rgba(0,255,255,0.95);
+    box-shadow: 0px 0px 12px rgba(0,255,255,0.5);
+    background-color: transparent;
+    border: 1px solid rgba(127,255,255,0.25);
+}
+
+.element .input .text:focus {
+    box-shadow: 0px 0px 12px rgba(0,255,255,0.75);
+    border: 1px solid rgba(127,255,255,0.75);
+}
+
+.list {
+    width: 200px;
+    height: 40px;
+    box-shadow: 0px 0px 12px rgba(0,255,255,0.5);
+    border: 1px solid rgba(127,255,255,0.25);
+    cursor: default;
+}
+
+.list:hover {
+    box-shadow: 0px 0px 12px rgba(0,255,255,0.75);
+    border: 1px solid rgba(127,255,255,0.75);
+}
+
+.list .symbol {
+    width: 200px;
+    margin-top : 10px;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    color: rgba(255,255,255,0.75);
+    text-shadow: 0 0 10px rgba(0,255,255,0.95);
+}
+
+
+.preview_l {
+    width: 300px;
+    height: 200px;
+    box-shadow: 0px 0px 12px rgba(0,255,255,0.5);
+    border: 1px solid rgba(127,255,255,0.25);
+    cursor: default;
+}
+
+.preview_l:hover {
+    box-shadow: 0px 0px 12px rgba(0,255,255,0.75);
+    border: 1px solid rgba(127,255,255,0.75);
+}
+
+.preview_l .symbol {
+    width: 200px;
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+    color: rgba(255,255,255,0.75);
+    text-shadow: 0 0 10px rgba(0,255,255,0.95);
+}
