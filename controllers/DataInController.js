@@ -42,7 +42,7 @@ exports.scraps = function(req, res){
     console.log(path_scrap);
     if(path_scrap == "null"){
         path_scrap = './Userdir/'+user+'/scrap-'+keyword1+keyword2+keyword3+'-'+dt;
-
+        //넣는
         // 스크랩한 내용을 Scrap모델에 넣는다.
         Scrap.update(scrap_query, scrap_update, option, function(){});
         // 위에서 넣은 스크랩 내용의 _id를 찾는다.
