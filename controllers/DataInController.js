@@ -55,7 +55,7 @@ exports.scraps = function(req, res){
                 console.log('유저모델에 스크랩_id넣는데 실패했어. :' +scrap_query);
             }
         });
-
+        //gg
         // 스크랩한 내용을 Keyword모델에 넣는다.
         if(keyword1){
             Keyword.update( keyword_query1, keyword_update1, option, function(){} );
