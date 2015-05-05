@@ -18,12 +18,12 @@ SCRAP.MAIN2.Scene = function() {
 
         SceneManager._setCamera();
         SceneManager._initScene();
-        requestScrap(SCRAP.DIRECTOR._curuser, -1, 10);
-
+        //requestScrap(SCRAP.DIRECTOR._curuser, -1, 10);
+        requestScrapImage(SCRAP.DIRECTOR._curuser, -1, 10);
     }
 
     SceneManager._postProc = function(rcvData, rcvKeyword, rcvPath, rcvUser, rcvIdx) {
-        
+
         SceneManager._initObject();
         SceneManager._initListener();
         SceneManager.CSSScene.children[2]._setList(rcvData, rcvKeyword, rcvPath, rcvUser, rcvIdx, true);
@@ -62,7 +62,7 @@ SCRAP.MAIN2.Scene = function() {
         SceneManager.CSSScene.add(new SCRAP.MAIN2.mainControlView(80, 0, 300, true));
         SceneManager.CSSScene.add(new SCRAP.MAIN2.commentView(700,50,500));
         SceneManager.CSSScene.add(new SCRAP.MAIN2.userView(-600,-30,400));
-
+        SceneManager.CSSScene.add(new SCRAP.MAIN2.settingView(0,350,500));
     }
 
     SceneManager._initListener = function() {
@@ -94,6 +94,7 @@ SCRAP.MAIN2.Scene = function() {
         var commentInput = SceneManager.CSSScene.children[4];
         console.log(commentInput.children[1]);
         commentInput.children[1].children[0].element.addEventListener("keypress", function hitEnterKey(e) {
+            console.log(e.keyCode);
             if (e.keyCode == 13) {
                 var input = commentInput.children[1].children[0]._getInput();
                 commentInput.children[1].children[0]._reset();
@@ -104,6 +105,22 @@ SCRAP.MAIN2.Scene = function() {
                 var path = curView.children[curIdx]._path;
 
                 sendComment(path,input,SCRAP.DIRECTOR._curuser);
+            } else {
+                e.keyCode == 0;
+                return;
+            }
+        });
+
+        window.addEventListener("keypress", function hitEnterKey(e) {
+            console.log(e.keyCode);
+            if (e.keyCode == 113) {
+                var curScene = SCRAP.DIRECTOR._sceneList["main2"]
+                var curView = curScene.CSSScene.children[6];
+                if (curView._enable) {
+                    curView._exit();
+                } else {
+                    curView._start();
+                }
             } else {
                 e.keyCode == 0;
                 return;
@@ -159,6 +176,12 @@ SCRAP.MAIN2.Scene = function() {
 
     SceneManager._exit = function( chain ) {
 
+        for(var i=1; i<SceneManager.CSSScene.children.length; i++) {
+            console.log(i);
+            SceneManager.CSSScene.children[i]._exit();
+        }
+
+        setTimeout(chain, 500);
     }
 
     SceneManager._setCamera = function() {

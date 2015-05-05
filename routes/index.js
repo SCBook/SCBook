@@ -23,7 +23,7 @@ var isAuthenticated = function (req, res, next) {
 
 module.exports = function(passport){
     router.get('/', function(req, res) {
-        res.render('index', {});
+        res.render('prevCheck', {});
     });
 
     router.post('/login-view', function(req, res, next) {

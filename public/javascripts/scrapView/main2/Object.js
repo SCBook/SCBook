@@ -76,6 +76,23 @@ SCRAP.MAIN2.FlipView = function(x, y, z, mirror) {
         })
     }
 
+    group._exit = function() {
+        for(var i=0; i<group.children.length; i++) {
+            var temp = group.children[i];
+            if(i%2==0){
+                new TWEEN.Tween(temp.position)
+                    .to({x:-200},200)
+                    .start();
+                SCRAP.Fader.fadeOut(temp,200);
+            } else {
+                new TWEEN.Tween(temp.position)
+                    .to({x:200},200)
+                    .start();
+                SCRAP.Fader.fadeOut(temp,200);
+            }
+        }
+    }
+
     group._flipDown = function() {
         if(group._cur==-1) return;
         for(var i=0 ; i<group.flipAnimation.length; i++) {
@@ -190,6 +207,8 @@ SCRAP.MAIN2.mainviewObject = function( t ) {
         object._element.innerHTML = data;
     }
 
+    document.body.backgroundColor = 'rgba(0,0,0,1)';
+
     return object;
 
 }
@@ -225,10 +244,10 @@ SCRAP.MAIN2.circleView = function (x, y, z, mirror) {
     }
 
     group._start = function() {
-/*
-        var _width = group.children[0]._width;
-        var _height = group.children[0]._height;
-*/
+        /*
+         var _width = group.children[0]._width;
+         var _height = group.children[0]._height;
+         */
         var _width = 800;
         var _height = 600;
         var delta = (2500);
@@ -267,7 +286,8 @@ SCRAP.MAIN2.circleView = function (x, y, z, mirror) {
         }
         var start = end - cnt;
         if(start < 0) start = 0;
-        requestScrap(SCRAP.DIRECTOR._curuser, start, end, "old");
+        requestScrapImage(SCRAP.DIRECTOR._curuser, start, end, "old");
+        //requestScrap(SCRAP.DIRECTOR._curuser, start, end, "old");
     }
 
     group._addFront = function( cnt ) {
@@ -308,11 +328,15 @@ SCRAP.MAIN2.circleView = function (x, y, z, mirror) {
             group._requestOld(10);
             return;
         }
-        else cnt = -(cnt + group._head + group._bound - group.children.length);
+
+        if(cnt <= -group._bound && group._req) {
+            return;
+        }
+
+        cnt = -(cnt + group._head + group._bound - group.children.length);
 
         if(group._action){
             console.log("already action!");
-            setTimeout(group._forward, 100);
             return;
         }
 
@@ -323,14 +347,18 @@ SCRAP.MAIN2.circleView = function (x, y, z, mirror) {
         var _margin = group._margin;
         var _delta = _width + _margin;
 
-        new TWEEN.Tween(group.position)
+        console.log("--------------------before forward-----------");
+        console.log(group.position.x + _delta * cnt * Math.cos(Math.PI / 8));
+        console.log(group.position.z + _delta * cnt * Math.sin(Math.PI / 8));
+        var t = new TWEEN.Tween(group.position)
             .to({x:group.position.x + _delta * cnt * Math.cos(Math.PI / 8), z:group.position.z + _delta * cnt * Math.sin(Math.PI / 8)}, 100 * cnt)
             .easing(TWEEN.Easing.Exponential.InOut)
             .onComplete(function() {
                 group._action = false;
             })
             .start();
-
+        console.log(t);
+        console.log("--------------------after forward-----------");
         group._head += cnt;
     }
 
@@ -339,11 +367,16 @@ SCRAP.MAIN2.circleView = function (x, y, z, mirror) {
         var firstIdx = group.children[0]._index;
         var start = firstIdx+1;
         var end = start + cnt;
-        requestScrap(SCRAP.DIRECTOR._curuser, start, end, "new");
+        //requestScrap(SCRAP.DIRECTOR._curuser, start, end, "new");
+        requestScrapImage(SCRAP.DIRECTOR._curuser, start, end, "new");
     }
 
     group._addBack = function( cnt ) {
-        if(cnt <= 0) return;
+        if(cnt <= 0){
+            console.log("escpae!");
+            return;
+        }
+        console.log("noescape");
         var _width = group.children[0]._width;
         var _height = group.children[0]._height;
         for(var i=0; i<group.children.length; i++) {
@@ -361,6 +394,7 @@ SCRAP.MAIN2.circleView = function (x, y, z, mirror) {
             temp[i]._element._idx = num + cnt;
         }
         group.children = [];
+
         for(var i=0; i<cnt; i++) {
             group.add(new SCRAP.MAIN2.mainviewObject("main " + i));
             group.children[i].position.set(-(_width+group._margin) * (i), _height / 2 , 0);
@@ -379,7 +413,6 @@ SCRAP.MAIN2.circleView = function (x, y, z, mirror) {
             });
         }
         group._head += cnt;
-        group._targetPos += cnt;
         group.children = group.children.concat(temp);
     }
 
@@ -391,18 +424,21 @@ SCRAP.MAIN2.circleView = function (x, y, z, mirror) {
             group._deselect(group._backward, cnt);
             return;
         }
-
+        console.log(cnt + " , " +  group._head);
         cnt = group._head - cnt;
+
         if(cnt < 0 && !group._req) {
             group._req = true;
             group._requestNew(10);
             return;
         }
-        else cnt = group._head - cnt;
+        if(cnt < 0 && group._req) {
+            return;
+        }
+        cnt = -(cnt - group._head);
 
         if(group._action){
             console.log("already action!");
-            setTimeout(group._backward, 100);
             return;
         }
 
@@ -411,7 +447,9 @@ SCRAP.MAIN2.circleView = function (x, y, z, mirror) {
         var _width = group.children[group._head]._width;
         var _margin = group._margin;
         var _delta = _width + _margin;
-
+        console.log("------------------------before_move-------------------");
+        console.log(group.position.x - _delta * cnt * Math.cos(Math.PI / 8));
+        console.log(group.position.z - _delta * cnt * Math.sin(Math.PI / 8));
         new TWEEN.Tween(group.position)
             .to({x:group.position.x - _delta * cnt * Math.cos(Math.PI / 8), z:group.position.z - _delta * cnt * Math.sin(Math.PI / 8)}, 100 * cnt)
             .easing(TWEEN.Easing.Exponential.InOut)
@@ -420,12 +458,9 @@ SCRAP.MAIN2.circleView = function (x, y, z, mirror) {
                 group._req = false;
             })
             .start();
-
-        for(var i=0; i<cnt; i++) {
-            //SCRAP.Fader.fadeOut(group.children[group._head + group._bound], 100);
-            group._head--;
-            //SCRAP.Fader.fadeIn(group.children[group._head], 100);
-        }
+        console.log("------------------------after_move-------------------");
+        group._head-=cnt;
+        group._targetPos-=cnt;
     }
 
     group._deselect = function( callback, param ) {
@@ -516,6 +551,23 @@ SCRAP.MAIN2.circleView = function (x, y, z, mirror) {
             .easing(TWEEN.Easing.Exponential.InOut)
             .start();
 
+    }
+
+    group._exit = function() {
+        for(var i=0; i<group.children.length; i++) {
+            var temp = group.children[i];
+            if(i%2==0){
+                new TWEEN.Tween(temp.position)
+                    .to({z:-200},200)
+                    .start();
+                SCRAP.Fader.fadeOut(temp,200);
+            } else {
+                new TWEEN.Tween(temp.position)
+                    .to({z:200},200)
+                    .start();
+                SCRAP.Fader.fadeOut(temp,200);
+            }
+        }
     }
 
     group.rotation.y = -Math.PI/8;
@@ -1461,7 +1513,7 @@ SCRAP.MAIN2.userView = function(x, y, z) {
     group._exit = function() {
         setTimeout(function() {group.position.z = -SCRAP._INF}, 300);
         for(var i=0; i<group.children.length; i++)
-                group.children[i]._exit();
+            group.children[i]._exit();
     }
 
     group.position.set(x, y, z);
@@ -1472,3 +1524,183 @@ SCRAP.MAIN2.userView = function(x, y, z) {
     return group;
 }
 
+
+SCRAP.MAIN2.blockObject = function( ) {
+
+    var root = new SCRAP.Element('div',
+        {
+            'style' : {
+                'opacity' : 0
+            }
+        }
+        ,
+        null
+    );
+
+    var element = new SCRAP.Element('div',
+        {
+            'style' : {
+                'backgroundColor':'rgba(0,0,0,0.5)',
+                'width':'10000px',
+                'height':'10000px'
+            }
+        }
+        , root
+    );
+
+    var object = new THREE.CSS3DObject(root);
+
+    return object;
+}
+
+SCRAP.MAIN2.msgObject = function( ) {
+
+    var root = new SCRAP.Element('div',
+        {
+            'style' : {
+                'opacity' : 0
+            }
+        }
+        ,
+        null
+    );
+
+    var element = new SCRAP.Element('div',
+        {
+            'className' : 'alert',
+            'style' : {
+                'backgroundColor':'rgba(0,0,0,0.9)'
+            }
+        }
+        , root
+    );
+
+    var msg = new SCRAP.Element('div',
+        {
+            'className' : 'msg',
+            'innerHTML' : '로그아웃 하시겠습니까?'
+        }
+        , element
+    );
+
+    var object = new THREE.CSS3DObject(root);
+
+
+    return object;
+}
+
+SCRAP.MAIN2._ButtonObject = function( textValue ) {
+
+    var root = new SCRAP.Element('div',
+        {
+        },
+        null
+    );
+
+    var element = new SCRAP.Element('div',
+        {
+            'className' : 'lists',
+            'style' : {
+                'backgroundColor':'rgba(0,127,127,0.5)'
+            }
+        }
+        , root
+    );
+
+    var symbol = new SCRAP.Element('div',
+        {
+            'className' : 'symbol',
+            'innerHTML' : textValue
+        }
+        , element
+    );
+
+    var object = new THREE.CSS3DObject(root);
+    object._width = 200;
+    object._height = 40;
+
+    return object;
+
+}
+
+SCRAP.MAIN2.settingView = function(x, y, z) {
+
+    var group = new THREE.Group();
+    group._myPos = new THREE.Vector3(x, y, z);
+    group._enable = false;
+
+    group._eventTime = 0;
+
+    group._init = function() {
+
+        group.position.z = SCRAP._INF;
+
+        var back = new SCRAP.MAIN2.blockObject();
+        group.add(back);
+
+        var msg = new SCRAP.MAIN2.msgObject();
+        msg.position.z = 10;
+        group.add(msg);
+
+        var yesBut = new SCRAP.MAIN2._ButtonObject("네");
+        yesBut.position.x = -100;
+        yesBut.position.y = -100;
+        yesBut.position.z = 10;
+        yesBut.element.addEventListener("click",function eventHandler(e) {
+            requestSignOut();
+        })
+        group.add(yesBut);
+
+        var noBut = new SCRAP.MAIN2._ButtonObject("아니오");
+        noBut.position.x = 100;
+        noBut.position.y = -100;
+        noBut.position.z = 10;
+        group.add(noBut);
+
+    }
+
+    group._start = function() {
+        var d = new Date();
+        var n = d.getTime();
+        if( Math.abs(group._eventTime - n) < 200 ) return;
+        group._eventTime = n;
+        console.log("start");
+        group._enable = true;
+
+        var camPos = new THREE.Vector3(camera.position.x, camera.position.y, camera.position.z);
+        var camtarPos = new THREE.Vector3(cameraTarget.x, cameraTarget.y, cameraTarget.z);
+
+        var diffPos = new THREE.Vector3(camPos.x, - camtarPos.x, camPos.y - camtarPos.y, camPos.z - camtarPos.z);
+        var ratioDiffPos = diffPos.multiplyScalar(0.8);
+        console.log(diffPos);
+        console.log(ratioDiffPos);
+        var newPos = new THREE.Vector3(camtarPos.x + ratioDiffPos.x, camtarPos.y + ratioDiffPos.y, camtarPos.z + ratioDiffPos.z);
+
+        group.position.set(newPos.x, newPos.y, newPos.z);
+        group.lookAt(camPos);
+
+        for(var i=0; i<group.children.length; i++){
+            SCRAP.Fader.fadeIn(group.children[i],500);
+        }
+    }
+
+    group._exit = function() {
+        var d = new Date();
+        var n = d.getTime();
+        if( Math.abs(group._eventTime - n) < 200 ) return;
+        group._eventTime = n;
+        console.log("end");
+        group._enable = false;
+        setTimeout(function() {group.position.z = SCRAP._INF;}, 600);
+        for(var i=0; i<group.children.length; i++){
+            SCRAP.Fader.fadeOut(group.children[i],500);
+        }
+    }
+
+    group.position.set(x, y , z);
+
+    group._init();
+
+    return group;
+
+}
