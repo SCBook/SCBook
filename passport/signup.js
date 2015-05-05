@@ -64,7 +64,7 @@ module.exports = function(passport){
     // 새로운 유저정보를 정규표현식으로 검사. 성공 : true, 실패 : false
     var regularEx = function(newUser){
         if(!chk(/^[a-z0-9_]{5,12}$/, newUser.username)){
-            messageErr = "5~12자 영문소문자, 숫자, 특수문자 _ 사용가능.";
+            messageErr = "유저네임 형식이 5~12자 영문소문자, 숫자, 특수문자 _ 사용가능.";
             return false;
         }
         /*if(!chk(/^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/, newUser.email)){

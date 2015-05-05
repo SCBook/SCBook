@@ -60,9 +60,11 @@ exports.screenshot_view = function(req, res){
     var scrap_arr=[];
     var i;
 
+    console.log('===screenshot===');
+    console.log(contact);
     User.findOne({'username' : contact.username}, function(err, user){
-        /*console.log('====== user =======');
-         console.log(user);*/
+        console.log('====== user =======');
+         console.log(user);
         if(user){
             if(start >= 0) {
                 i = start;
@@ -81,8 +83,8 @@ exports.screenshot_view = function(req, res){
                     if (pass_state) {
                         pass_state = false;
                         Scrap.findOne({'_id': user.Scraps[i]}, function (err, scrap) {
-                            /*console.log('=================== scrap ==================');
-                             console.log(scrap);*/
+                            console.log('=================== scrap ==================');
+                             console.log(scrap);
                             if (scrap) {
                                 if(scrap.path_image){
                                     fs.readFile(scrap.path_image, 'utf8', function (err, data) {
@@ -97,11 +99,16 @@ exports.screenshot_view = function(req, res){
                                         }
                                     });
                                 }
+                                else{
+                                    i++; pass_state = true;
+                                }
                             }
                         });
                     }
                     setTimeout(check_scrap1, 10);
                 } else {
+                    console.log('=== scrap arr ===');
+;                    console.log(scrap_arr);
                     res.send(scrap_arr);
                 }
             }

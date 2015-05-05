@@ -175,95 +175,6 @@ module.exports = function(passport){
         res.redirect('/list-scrap');
     });
 
-    /*router.get('/post2', function(req, res, next){
-        var username = "hansolchoi";
-        fs.readFile('./webscrap/dumy6.html', 'utf8', function(err, data){
-            if(err){
-                throw err;
-            }else{
-                var scrap = {
-                    username : username,
-                    keyword: "Operating_System",
-                    url:"http://navercast.naver.com/contents.nhn?rid=47&contents_id=865038",
-                    scrap_data : data
-                }
-                http.post('http://localhost:3000/scrap',scrap, function(res){
-                    return res;
-                });
-            }
-        });
-        fs.readFile('./webscrap/dumy7.html', 'utf8', function(err, data){
-            if(err){
-                throw err;
-            }else{
-                var scrap = {
-                    username : username,
-                    keyword: "Scheduler",
-                    url:"http://navercast.naver.com/contents.nhn?rid=47&contents_id=865039",
-                    scrap_data : data
-                }
-                http.post('http://localhost:3000/scrap',scrap, function(res){
-                    return res;
-                });
-            }
-        });
-        fs.readFile('./webscrap/dumy8.html', 'utf8', function(err, data){
-            if(err){
-                throw err;
-            }else{
-                var scrap = {
-                    username : username,
-                    keyword: "File_system",
-                    url:"http://navercast.naver.com/contents.nhn?rid=47&contents_id=865040",
-                    scrap_data : data
-                }
-                http.post('http://localhost:3000/scrap',scrap, function(res){
-                    return res;
-                });
-            }
-        });
-        fs.readFile('./webscrap/dumy9.html', 'utf8', function(err, data){
-            if(err){
-                throw err;
-            }else{
-                var scrap = {
-                    username : username,
-                    keyword: "Memory_manager",
-                    url:"http://navercast.naver.com/contents.nhn?rid=47&contents_id=865041",
-                    scrap_data : data
-                }
-                http.post('http://localhost:3000/scrap',scrap, function(res){
-                    return res;
-                });
-            }
-        });
-        fs.readFile('./webscrap/dumy10.html', 'utf8', function(err, data){
-            if(err){
-                throw err;
-            }else{
-                var scrap = {
-                    username : username,
-                    keyword: "Round_Robin",
-                    url:"http://navercast.naver.com/contents.nhn?rid=47&contents_id=865042",
-                    scrap_data : data
-                }
-                http.post('http://localhost:3000/scrap',scrap, function(res){
-                    return res;
-                });
-            }
-        });
-    });
-    router.get('/post2', function(req, res, next){
-        var username = "hansolchoi";
-        fs.readFile('./webscrap/dumy11.html', 'utf8', function(err, data){
-            if(err){
-                throw err;
-            }else{
-                res.send(data);
-            }
-        });
-    });*/
-
     // 회원가입
     router.post('/signup', passport.authenticate('signup', {
         successRedirect: '/signup-success',
@@ -290,7 +201,7 @@ module.exports = function(passport){
     });
 
     router.post('/scrap', isAuthenticated, function(req, res, next){
-        dataincontroller.scraps(req, res);
+        dataincontroller.scraps_create(req, res);
     });
 
     router.post('/scraps', function(req, res, next){

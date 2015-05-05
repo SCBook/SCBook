@@ -8,7 +8,7 @@ var Comment = require('../models/comment.js');
 var fs = require('fs');
 require('date-utils');
 
-exports.scraps = function(req, res){
+exports.scraps_create = function(req, res){
     var contact = req.body;
 
     var user = contact.username;
