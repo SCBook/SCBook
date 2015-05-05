@@ -8,30 +8,47 @@ var Comment = require('../models/comment.js');
 var fs = require('fs');
 require('date-utils');
 
-// 한솔이 수도
 exports.word_cloud = function(req, res){
     var contact = req.query;
     var username = contact.username;
     var keyword_arr=[];
     var keyword_temp = [];
+    var index = [];
+    var keyword_res = [];
     User.findOne({'username' : username}, function(err, user){
         if(user){
-            for(var i= 0, j=0; i<user.Keywords.length; i++){
+            var overlap = 0, max= 0, independence=0;
+            for(var i= 0; i<user.Keywords.length; i++){
                 Keyword.findOne({'_id':user.Keywords[i]}, function(err, keyword){
                     if(keyword){
-                        if(keyword_temp[keyword] == null){
-                            keyword_arr.push(keyword);
-                            keyword_temp[keyword] = 1;
+                        if(keyword_temp[keyword.keyword_name] == null){
+                            keyword_temp[keyword.keyword_name] = {keyword_name : keyword.keyword_name, 'weight' : 1};
+                            index.push(keyword.keyword_name);
+                            independence++;
+                        }else{
+                            keyword_temp[keyword.keyword_name].weight++;
+                            if(keyword_temp[keyword.keyword_name].weight > max) max =keyword_temp[keyword.keyword_name].weight;
+                            overlap++;
                         }
                     }
                 });
             }
             function check(){
-                if (keyword_arr.length < user.Keywords.length && keyword_arr.length < 20){
+                if (independence + overlap != user.Keywords.length && keyword_arr.length < 20){
+                    //console.log('total length : '+ user.Keywords.length);
+                    //console.log('length : ' + keyword_temp.length + overlap);
                     setTimeout(check, 10);
                 }
                 else{
-                    res.send(keyword_arr);
+                    for(var i=0; i<independence; i++){
+                        keyword_res.push(keyword_temp[index[i]]);
+                    }
+                    for(var j=0; j<independence; j++){
+                        keyword_res[j].weight = keyword_res[j].weight*50/max + 100;
+                    }
+                    /*console.log('====== end ======');
+                     console.log(keyword_res);*/
+                    res.send(keyword_res);
                 }
             }
             check();
