@@ -84,6 +84,9 @@ function requestScrap ( username, start, end, type) {
             else if(type=="old") curScene.CSSScene.children[2]._setList(rcvData, rcvKeyword, rcvPath, rcvUser, rcvIdx, true);
             else curScene.CSSScene.children[2]._setList(rcvData, rcvKeyword, rcvPath, rcvUser, rcvIdx, false);
         }
+        else {
+            console.log("didn't received response");
+        }
     }
     xmlhttp.open("POST","./scrap-view?username="+username+"&start="+start+"&end="+end,true);
     xmlhttp.send();
