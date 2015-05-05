@@ -35,8 +35,6 @@ exports.word_cloud = function(req, res){
             }
             function check(){
                 if (independence + overlap != user.Keywords.length && keyword_arr.length < 20){
-                    //console.log('total length : '+ user.Keywords.length);
-                    //console.log('length : ' + keyword_temp.length + overlap);
                     setTimeout(check, 10);
                 }
                 else{
@@ -46,8 +44,6 @@ exports.word_cloud = function(req, res){
                     for(var j=0; j<independence; j++){
                         keyword_res[j].weight = keyword_res[j].weight*50/max + 100;
                     }
-                    /*console.log('====== end ======');
-                     console.log(keyword_res);*/
                     res.send(keyword_res);
                 }
             }
@@ -62,7 +58,7 @@ exports.scrap_view = function(req, res){
     var end = contact.end;
     var scrap_arr=[];
     var i;
-    // 내가 달아버린 주석은 여기 있습니다.
+
     User.findOne({'username' : contact.username}, function(err, user){
         if(user){
             if(start >= 0) {
@@ -84,8 +80,6 @@ exports.scrap_view = function(req, res){
                         Scrap.findOne({'_id': user.Scraps[i]}, function (err, scrap) {
                             if (scrap) {
                                 fs.readFile(scrap.path + '.html', 'utf8', function (err, data) {
-                                    // 환상적인 코드네요!!
-                                    // 왜 안되지...
                                     if (err) {
                                         try {
                                             throw err;
