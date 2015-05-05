@@ -50,6 +50,7 @@ exports.scraps_create = function(req, res){
             // 찾은 _id를 유저의 Scraps필드에 넣는다.
             if(scrap){
                 User.update(user_query, {$push : {Scraps : scrap._id}}, option, function(){});
+                res.send({'state' : 'path', 'path' : path_scrap});
             }
             else{
                 console.log('유저모델에 스크랩_id넣는데 실패했어. :' +scrap_query);
@@ -106,7 +107,6 @@ exports.scraps_create = function(req, res){
         });
     });
 
-    res.send({'state' : 'path', 'path' : path_scrap});
 }
 
 exports.image = function(req, res){

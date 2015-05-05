@@ -204,6 +204,14 @@ module.exports = function(passport){
         dataincontroller.scraps_create(req, res);
     });
 
+    router.post('/scrap-view', isAuthenticated, function(req, res, next){
+        dataoutcontroller.scrap_read(req, res);
+    });
+
+    router.post('/scrap-update', isAuthenticated, function(req, res, next){
+        dataoutcontroller.scrap_update(req, res);
+    });
+
     router.post('/scraps', function(req, res, next){
         cont.scraps(req, res);
     });
@@ -213,9 +221,7 @@ module.exports = function(passport){
         dataoutcontroller.word_cloud(req, res);
     });
 
-    router.post('/scrap-view', function(req, res, next){
-        dataoutcontroller.scrap_view(req, res);
-    });
+
 
     router.post('/comment-view', function(req, res, next){
         dataoutcontroller.comment_view(req, res);

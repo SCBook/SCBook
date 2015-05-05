@@ -117,7 +117,7 @@ exports.screenshot_view = function(req, res){
     });
 }
 
-exports.scrap_view = function(req, res){
+exports.scrap_read = function(req, res){
     var contact = req.query;
     var start = contact.start;
     var end = contact.end;
@@ -178,6 +178,9 @@ exports.scrap_view = function(req, res){
     });
 }
 
+exports.scrap_update = function(req, res){
+
+}
 exports.comment_view = function(req, res){
     var contact = req.query;
     var scrap_path = contact.path;
