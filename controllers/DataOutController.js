@@ -67,7 +67,13 @@ exports.scrap_view = function(req, res){
                             if (scrap) {
                                 fs.readFile(scrap.path + '.html', 'utf8', function (err, data) {
                                     if (err) {
-                                        throw err;
+                                        try {
+                                            throw err;
+                                        } catch ( err ){
+                                            console.log( err );
+                                            res.send([]);
+                                            return;
+                                        }
                                     } else {
                                         scrap_arr.push({
                                             scrap_data: data, keyword1: scrap.keyword1, keyword2: scrap.keyword2,
