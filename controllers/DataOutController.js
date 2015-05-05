@@ -8,7 +8,7 @@ var Comment = require('../models/comment.js');
 var fs = require('fs');
 require('date-utils');
 
-// 한솔이 수
+// 한솔이 수 // 궁금하네요
 exports.word_cloud = function(req, res){
     var contact = req.query;
     var username = contact.username;
@@ -45,7 +45,7 @@ exports.scrap_view = function(req, res){
     var end = contact.end;
     var scrap_arr=[];
     var i;
-
+    // 내가 달아버린 주석은 여기 있습니다.
     User.findOne({'username' : contact.username}, function(err, user){
         if(user){
             if(start >= 0) {
