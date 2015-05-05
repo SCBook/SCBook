@@ -1662,7 +1662,7 @@ SCRAP.MAIN2.settingView = function(x, y, z) {
     group._start = function() {
         var d = new Date();
         var n = d.getTime();
-        if( Math.abs(group._eventTime - n) < 200 ) return;
+        if( Math.abs(group._eventTime - n) < 600 ) return;
         group._eventTime = n;
         console.log("start");
         group._enable = true;
@@ -1687,13 +1687,13 @@ SCRAP.MAIN2.settingView = function(x, y, z) {
     group._exit = function() {
         var d = new Date();
         var n = d.getTime();
-        if( Math.abs(group._eventTime - n) < 200 ) return;
+        if( Math.abs(group._eventTime - n) < 500 ) return;
         group._eventTime = n;
         console.log("end");
         group._enable = false;
-        setTimeout(function() {group.position.z = SCRAP._INF;}, 600);
+        setTimeout(function() {group.position.z = SCRAP._INF;}, 500);
         for(var i=0; i<group.children.length; i++){
-            SCRAP.Fader.fadeOut(group.children[i],500);
+            SCRAP.Fader.fadeOut(group.children[i],600);
         }
     }
 

@@ -87,6 +87,8 @@ exports.screenshot_view = function(req, res){
                              console.log(scrap);
                             if (scrap) {
                                 if(scrap.path_image){
+                                    console.log('=================== path_imag ==================');
+                                    console.log(scrap.path_image);
                                     fs.readFile(scrap.path_image, 'utf8', function (err, data) {
                                         if (err) {
                                             throw err;
