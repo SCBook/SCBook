@@ -89,6 +89,7 @@ exports.removeAll = function(req, res){
             }
         }
     });
+
     Scrap.find({}, function(err, scrap){
         if(err) throw err;
         if(scrap){
@@ -118,7 +119,9 @@ exports.removeAll = function(req, res){
 }
 
 exports.comment_rm = function(req, res){
-    var path_name = './Userdir/hansolchoi/노트북-2015-05-02-05:15:21.html';
+    var contact = req.body;
+    var path_name = contact.comment_path;
+
     Scrap.findOne({'path': path_name}, function(err, scrap){
         console.log('여기'+scrap);
         for(var i=0; i<scrap.comments.length; i++){
@@ -237,10 +240,6 @@ exports.scraps = function(req, res){
     });
 
     //res.send({'state' : 'path', 'path' : path_scrap});
-}
-
-exports.weighting = function(req, res){
-
 }
 
 exports.image = function(req, res){

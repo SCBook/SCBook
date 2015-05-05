@@ -55,18 +55,12 @@ exports.scraps = function(req, res){
                 console.log('유저모델에 스크랩_id넣는데 실패했어. :' +scrap_query);
             }
         });
-        //ggg
-        //gg
         // 스크랩한 내용을 Keyword모델에 넣는다.
         if(keyword1){
             Keyword.update( keyword_query1, keyword_update1, option, function(){} );
             Keyword.findOne({'path' : path_keyword1}, function(err, keyword){
                 if(keyword){
-                    if(keyword.keyword_bit != 1){
-                        Keyword.update(path_keyword1,{$set : {keyword_bit : 1}},option, function(){})
                         User.update(user_query,{$push : {Keywords : keyword._id}}, option,function(){});
-                    }
-
                 }else{
                     console.log('키워드를 유저에 넣는데 실패했어 : ' +path_keyword1);
                 }
@@ -74,25 +68,23 @@ exports.scraps = function(req, res){
         }
         if(keyword2){
             Keyword.update( keyword_query2, keyword_update2, option,function () {} );
-            Keyword.find({'path' : path_keyword2}, function(err, keyword){
-                if(keyword.keyword_bit != 1){
-                    Keyword.update(path_keyword2,{$set : {keyword_bit : 1}},option, function(){})
+            Keyword.findOne({'path' : path_keyword2}, function(err, keyword){
+                if(keyword){
                     User.update(user_query,{$push : {Keywords : keyword._id}}, option,function(){});
                 }
                 else{
-                    console.log('키워드를 유저에 넣는데 실패했어 : ' +path_keyword1);
+                    console.log('키워드를 유저에 넣는데 실패했어 : ' +path_keyword2);
                 }
             });
         }
         if(keyword3){
             Keyword.update( keyword_query3, keyword_update3, option,function () {} );
-            Keyword.find({'path' : path_keyword3}, function(err, keyword){
-                if(keyword.keyword_bit != 1){
-                    Keyword.update(path_keyword3,{$set : {keyword_bit : 1}},option, function(){})
+            Keyword.findOne({'path' : path_keyword3}, function(err, keyword){
+                if(keyword){
                     User.update(user_query,{$push : {Keywords : keyword._id}}, option,function(){});
                 }
                 else{
-                    console.log('키워드를 유저에 넣는데 실패했어 : ' +path_keyword1);
+                    console.log('키워드를 유저에 넣는데 실패했어 : ' +path_keyword3);
                 }
             });
         }

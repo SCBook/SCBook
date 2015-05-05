@@ -15,6 +15,7 @@ exports.word_cloud = function(req, res){
     var keyword_temp = [];
     var index = [];
     var keyword_res = [];
+
     User.findOne({'username' : username}, function(err, user){
         if(user){
             var overlap = 0, max= 0, independence=0;
@@ -83,21 +84,19 @@ exports.screenshot_view = function(req, res){
                             /*console.log('=================== scrap ==================');
                              console.log(scrap);*/
                             if (scrap) {
-                                fs.readFile(scrap.path_image, 'utf8', function (err, data) {
-                                    if (err) {
-                                        throw err;
-                                    } else {
-                                        /* console.log('====== data =====');
-                                         console.log(data);*/
-                                        scrap_arr.push({
-                                            scrap_data: " <img src = \" "+data+"\">", keyword1: scrap.keyword1, keyword2: scrap.keyword2,
-                                            keyword3: scrap.keyword3, path: scrap.path, username: contact.username, index: i
-                                        }/*data*/);
-                                        i++;
-                                        pass_state = true;
-                                    }
-
-                                });
+                                if(scrap.path_image){
+                                    fs.readFile(scrap.path_image, 'utf8', function (err, data) {
+                                        if (err) {
+                                            throw err;
+                                        } else {
+                                            scrap_arr.push({
+                                                scrap_data: " <img src = \" "+data+"\">", keyword1: scrap.keyword1, keyword2: scrap.keyword2,
+                                                keyword3: scrap.keyword3, path: scrap.path, username: contact.username, index: i
+                                            });
+                                            i++; pass_state = true;
+                                        }
+                                    });
+                                }
                             }
                         });
                     }
@@ -106,9 +105,7 @@ exports.screenshot_view = function(req, res){
                     res.send(scrap_arr);
                 }
             }
-
             check_scrap1();
-
         }
     });
 }
@@ -153,7 +150,7 @@ exports.scrap_view = function(req, res){
                                         scrap_arr.push({
                                             scrap_data: data, keyword1: scrap.keyword1, keyword2: scrap.keyword2,
                                             keyword3: scrap.keyword3, path: scrap.path, username: contact.username, index: i
-                                        }/*data*/);
+                                        });
                                         i++;
                                         pass_state = true;
                                     }
