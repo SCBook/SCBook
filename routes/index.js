@@ -326,5 +326,9 @@ module.exports = function(passport){
         dataincontroller.image(req,res);
     });
 
+    router.post('/screenshot-view', function(req, res, next){
+        dataoutcontroller.screenshot_view(req,res);
+    });
+
     return router;
 }

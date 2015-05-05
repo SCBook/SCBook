@@ -52,6 +52,67 @@ exports.word_cloud = function(req, res){
     });
 }
 
+exports.screenshot_view = function(req, res){
+    var contact = req.query;
+    var start = contact.start;
+    var end = contact.end;
+    var scrap_arr=[];
+    var i;
+
+    User.findOne({'username' : contact.username}, function(err, user){
+        /*console.log('====== user =======');
+         console.log(user);*/
+        if(user){
+            if(start >= 0) {
+                i = start;
+                if(end >= user.Scraps.length) {
+                    end = user.Scraps.length - 1;
+                }
+            }else {
+                i = user.Scraps.length - end;
+                if(i < 0 ) i = 0;
+                end = user.Scraps.length;
+            }
+            var pass_state = true;
+
+            function check_scrap1() {
+                if (i < end) {
+                    if (pass_state) {
+                        pass_state = false;
+                        Scrap.findOne({'_id': user.Scraps[i]}, function (err, scrap) {
+                            /*console.log('=================== scrap ==================');
+                             console.log(scrap);*/
+                            if (scrap) {
+                                fs.readFile(scrap.path_image, 'utf8', function (err, data) {
+                                    if (err) {
+                                        throw err;
+                                    } else {
+                                        /* console.log('====== data =====');
+                                         console.log(data);*/
+                                        scrap_arr.push({
+                                            scrap_data: " <img src = \" "+data+"\">", keyword1: scrap.keyword1, keyword2: scrap.keyword2,
+                                            keyword3: scrap.keyword3, path: scrap.path, username: contact.username, index: i
+                                        }/*data*/);
+                                        i++;
+                                        pass_state = true;
+                                    }
+
+                                });
+                            }
+                        });
+                    }
+                    setTimeout(check_scrap1, 10);
+                } else {
+                    res.send(scrap_arr);
+                }
+            }
+
+            check_scrap1();
+
+        }
+    });
+}
+
 exports.scrap_view = function(req, res){
     var contact = req.query;
     var start = contact.start;
