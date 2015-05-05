@@ -114,7 +114,8 @@
             console.log(loginView);
             loginView.addEventListener("keypress", function hitEnterKey(e) {
                 if (e.keyCode == 13) {
-                    requestLogin();
+                    if(loginView._status == "login") requestLogin();
+                    else requestJoin();
                 } else {
                     e.keyCode == 0;
                     return;

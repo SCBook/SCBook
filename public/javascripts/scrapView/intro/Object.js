@@ -2,9 +2,9 @@
  * Created by user on 2015-04-03.
  */
 
-SCRAP.INTRO = {REVISION:1}
+SCRAP.INTRO = {REVISION:1};
 
-SCRAP.INTRO.loginObject = function( type ) {
+SCRAP.INTRO.loginObject = function( ) {
 
     var root = new SCRAP.Element('div',
         {
@@ -165,6 +165,8 @@ SCRAP.INTRO.loginView = function( x, y, z, mirror ) {
     var loginObject = new SCRAP.INTRO.loginObject();
     var hover = 10;
 
+    group._status = "login";
+
     loginObject.position.set(0, hover + ( loginObject._height / 2) , 0);
 
     group.add(loginObject);
@@ -179,7 +181,6 @@ SCRAP.INTRO.loginView = function( x, y, z, mirror ) {
     group.position.set( x-1000, y, z);
 
     group._start = function() {
-        console.log("start login");
         new TWEEN.Tween(group.position)
             .to({x: 0}, 1000)
             .easing(TWEEN.Easing.Exponential.InOut)
@@ -208,6 +209,7 @@ SCRAP.INTRO.loginView = function( x, y, z, mirror ) {
             .to({x:-150},1000)
             .easing(TWEEN.Easing.Exponential.InOut)
             .onComplete(function() {
+                group._status = "join";
                 if(chain!=null) chain();
             })
             .start();
@@ -218,6 +220,7 @@ SCRAP.INTRO.loginView = function( x, y, z, mirror ) {
             .to({x:0},1000)
             .easing(TWEEN.Easing.Exponential.InOut)
             .onComplete(function() {
+                group._status = "login";
                 if(chain!=null) chain();
             })
             .start();
