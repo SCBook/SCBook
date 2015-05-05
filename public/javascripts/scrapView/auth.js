@@ -56,7 +56,7 @@ function requestJoinAuth(id, pw)
             joinCallback(xmlhttp.responseText);
         }
     }
-    xmlhttp.open("GET","./signup?username="+id+"&password="+pw,true);
+    xmlhttp.open("POST","./signup?username="+id+"&password="+pw,true);
     xmlhttp.send();
 }
 

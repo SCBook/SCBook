@@ -80,6 +80,10 @@ SCRAP.INTRO.loginObject = function( ) {
         return pwText.value;
     }
 
+    object._getFocus = function() {
+        idText.focus();
+    }
+
     object._reset = function() {
         idText.value = "";
         pwText.value = "";
@@ -131,7 +135,8 @@ SCRAP.INTRO.loginCloneObject = function( type ) {
             'className' : 'text',
             'type' : 'text',
             'placeholder' : 'username',
-            'disabled'   : true
+            'disabled'   : true,
+            'autofocus' : true
         }
         , id
     );
@@ -236,6 +241,7 @@ SCRAP.INTRO.loginView = function( x, y, z, mirror ) {
 
     group._reset = function() {
         group.children[0]._reset();
+        group.children[0]._getFocus();
     }
 
     return group;

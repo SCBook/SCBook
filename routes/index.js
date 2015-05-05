@@ -265,7 +265,7 @@ module.exports = function(passport){
     });*/
 
     // 회원가입
-    router.get('/signup', passport.authenticate('signup', {
+    router.post('/signup', passport.authenticate('signup', {
         successRedirect: '/signup-success',
         failureRedirect: '/signup-fail',
         failureFlash : true
