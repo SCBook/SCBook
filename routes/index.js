@@ -23,7 +23,11 @@ var isAuthenticated = function (req, res, next) {
 
 module.exports = function(passport){
     router.get('/', function(req, res) {
-        res.render('prevCheck', {});
+        res.render('index', {});
+    });
+
+    router.get('/browserError', function(req, res) {
+        res.render('browserError', {});
     });
 
     // web에서 접근하는 로그인
