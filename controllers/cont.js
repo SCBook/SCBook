@@ -49,7 +49,6 @@ exports.removeAll = function(req, res){
                     if(err){
                         console.log('User directory already is removed.');
                     }else{
-
                         files.forEach(function(file, index, arr){
                             console.log('rm-file-name : '+ file);
                             if(file != 'image'){
@@ -63,21 +62,29 @@ exports.removeAll = function(req, res){
                     }
 
                 });
-                /*path = path+'image/';
-                fs.readdir(path, function(err, images){
+                var path_image = path+'image/';
+                fs.readdir(path_image, function(err, images){
                    if(err){
                        console.log('User image directory already is removed.');
                    }else{
                        images.forEach(function(image, index, arr){
                            console.log('rm-image-name : '+ image);
-                           fs.unlink(path+image, function(err){
-                               if(err) throw err;
+                           fs.unlink(path_image+image, function(err){
+                               if(err) {
+                                   try {
+                                       throw err;
+                                   } catch ( err ){
+                                       console.log( err );
+                                       res.send([]);
+                                       return;
+                                   }
+                               }
                                console.log('Successfully deleted '+ path+image+'\n');
                            });
                            if(index == arr.length -1);
                        });
                    }
-                });*/
+                });
                 user[i].remove();
             }
         }

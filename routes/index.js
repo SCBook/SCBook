@@ -26,6 +26,7 @@ module.exports = function(passport){
         res.render('index', {});
     });
 
+    // web에서 접근하는 로그인
     router.post('/login-view', function(req, res, next) {
         passport.authenticate('login', function(err, user, info) {
             if (err) { return next(err); }
@@ -40,6 +41,7 @@ module.exports = function(passport){
         })(req, res, next);
     });
 
+    // 크롬 extention에서 접근하는 로그인
     router.post('/login-view1', function(req, res, next) {
         var success = { state : 'LoginSuccess', user_id : req.body.username, user_pw : req.body.password};
         var fail = { state : 'LoginFail', user_id : req.body.username, user_pw : req.body.password};
@@ -56,14 +58,13 @@ module.exports = function(passport){
         })(req, res, next);
     });
 
+    // 로그아웃
     router.post('/signout',isAuthenticated, function(req, res) {
         req.logout();
         res.send("logout complete!");
     });
 
     router.post('/session-check', isAuthenticated, function(req, res){
-        console.log("request");
-        //console.log(req);
         var _res = {"response":"session-ok","data":req.user,"state" : "session-ok"};
         res.send(_res);
     });
