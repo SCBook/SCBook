@@ -84,6 +84,9 @@ function requestScrap ( username, start, end, type) {
             else if(type=="old") curScene.CSSScene.children[2]._setList(rcvData, rcvKeyword, rcvPath, rcvUser, rcvIdx, true);
             else curScene.CSSScene.children[2]._setList(rcvData, rcvKeyword, rcvPath, rcvUser, rcvIdx, false);
         }
+        else {
+            console.log("no recived");
+        }
     }
     xmlhttp.open("POST","./scrap-view?username="+username+"&start="+start+"&end="+end,true);
     xmlhttp.send();
@@ -91,7 +94,7 @@ function requestScrap ( username, start, end, type) {
 }
 
 function requestScrapImage ( username, start, end, type) {
-    console.log("requestScrap");
+    console.log("requestScrapImage");
     var xmlhttp;
     if (window.XMLHttpRequest)
     {// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -131,6 +134,9 @@ function requestScrapImage ( username, start, end, type) {
             if(start < 0) curScene._postProc(rcvData, rcvKeyword, rcvPath, rcvUser, rcvIdx);
             else if(type=="old") curScene.CSSScene.children[2]._setList(rcvData, rcvKeyword, rcvPath, rcvUser, rcvIdx, true);
             else curScene.CSSScene.children[2]._setList(rcvData, rcvKeyword, rcvPath, rcvUser, rcvIdx, false);
+        }
+        else {
+            console.log("no recived");
         }
     }
     xmlhttp.open("POST","./screenshot-view?username="+username+"&start="+start+"&end="+end,true);
