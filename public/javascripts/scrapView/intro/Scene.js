@@ -110,9 +110,10 @@
                 }
             }
 
-            var loginView = SceneManager.CSSScene.children[1].children[0].element;
+            var loginView = SceneManager.CSSScene.children[1];
+            var loginElement = loginView.children[0].element;
             console.log(loginView);
-            loginView.addEventListener("keypress", function hitEnterKey(e) {
+            loginElement.addEventListener("keypress", function hitEnterKey(e) {
                 if (e.keyCode == 13) {
                     if(loginView._status == "login") requestLogin();
                     else requestJoin();
