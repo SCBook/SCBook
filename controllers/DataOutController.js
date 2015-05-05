@@ -8,6 +8,7 @@ var Comment = require('../models/comment.js');
 var fs = require('fs');
 require('date-utils');
 
+// 한솔이 수
 exports.word_cloud = function(req, res){
     var contact = req.query;
     var username = contact.username;
