@@ -67,6 +67,9 @@ function joinCallback(res)
     var alert = curScene.CSSScene.children[5];
     alert._alert(res);
 
+    if(res=="join-success") {
+        toLoginView();
+    }
 }
 
 function sessionCheck() {
@@ -168,4 +171,26 @@ function loginCallback( res ) {
     }
     var alert = curScene.CSSScene.children[5];
     alert._alert(jsonObj.response);
+}
+
+function requestSignOut() {
+
+    var xmlhttp;
+    if (window.XMLHttpRequest)
+    {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp=new XMLHttpRequest();
+    }
+    else
+    {// code for IE6, IE5
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange=function()
+    {
+        if (xmlhttp.readyState==4 && xmlhttp.status==200)
+        {
+            SCRAP.DIRECTOR._sceneTransition("intro");
+        }
+    }
+    xmlhttp.open("POST","./signout",true);
+    xmlhttp.send();
 }
