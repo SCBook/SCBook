@@ -67,6 +67,7 @@ exports.scrap_view = function(req, res){
                             if (scrap) {
                                 fs.readFile(scrap.path + '.html', 'utf8', function (err, data) {
                                     // 환상적인 코드네요!!
+                                    // 왜 안되지...
                                     if (err) {
                                         try {
                                             throw err;
