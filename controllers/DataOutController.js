@@ -66,6 +66,7 @@ exports.scrap_view = function(req, res){
                         Scrap.findOne({'_id': user.Scraps[i]}, function (err, scrap) {
                             if (scrap) {
                                 fs.readFile(scrap.path + '.html', 'utf8', function (err, data) {
+                                    // 환상적인 코드네요!!
                                     if (err) {
                                         try {
                                             throw err;
