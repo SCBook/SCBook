@@ -72,6 +72,20 @@
 
         }
 
+        SceneManager._toLoginView = function() {
+
+            var l_group = SceneManager.CSSScene.children[1];
+            var b_group = SceneManager.CSSScene.children[2];
+            var j_group = SceneManager.CSSScene.children[4];
+            var nb_group = SceneManager.CSSScene.children[6];
+
+            l_group._reset();
+            nb_group._exit();
+            b_group._start();
+            j_group._exit(l_group._action['signIn']());
+
+        }
+
 
         SceneManager._initListener = function() {
 
