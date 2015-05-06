@@ -6,6 +6,10 @@ module.exports = mongoose.model('User', {
     username : String,
     password : String,
     email : String,
+    title : String,
+    path_profile_image : String,
+    nickname : String,
+    friends : [String],
     Keywords : [String],
     Scraps : [String]
 });

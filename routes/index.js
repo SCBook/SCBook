@@ -216,7 +216,7 @@ module.exports = function(passport){
         cont.scraps(req, res);
     });
 
-    //
+
     router.post('/word-cloud', function(req, res, next){
         dataoutcontroller.word_cloud(req, res);
     });
@@ -247,5 +247,25 @@ module.exports = function(passport){
         dataoutcontroller.screenshot_view(req,res);
     });
 
+    router.post('/User-profile', function(req, res, next){
+        var contact = req.query;
+        if( contact.command == 'Create'){
+
+        }else if( contact.command == 'Read'){
+
+        }else if( contact.command == 'Update'){
+
+        }else if( contact.command == 'Delete'){
+
+        }
+    });
+
+    router.get('/image-upload', function(req, res){
+        res.render('upload',{});
+    });
+
+    router.post('/profile-image', function(req, res){
+        dataincontroller.profile_image(req, res);
+    });
     return router;
 }

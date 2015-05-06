@@ -177,3 +177,18 @@ exports.comment_input = function(req, res){
     });
     res.send('requestHandled!');
 }
+
+exports.profile_image = function(req, res){
+    var contact = req.query;
+    var name = "hansolchoi";
+    var profile_path = './Userdir/'+name+'/image/';
+    fs.readFile(req.files.uploadFile.path, function(err,data){
+       fs.writeFile(profile_path, data, function(error){
+          if(error){
+              throw error;
+          }else{
+              res.send('profile image upload success');
+          }
+       });
+    });
+}
