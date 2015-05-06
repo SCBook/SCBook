@@ -1671,10 +1671,10 @@ SCRAP.MAIN2.settingView = function(x, y, z) {
         var camtarPos = new THREE.Vector3(cameraTarget.x, cameraTarget.y, cameraTarget.z);
 
         var diffPos = new THREE.Vector3(camPos.x, - camtarPos.x, camPos.y - camtarPos.y, camPos.z - camtarPos.z);
-        var ratioDiffPos = diffPos.multiplyScalar(0.8);
         console.log(diffPos);
+        var ratioDiffPos = diffPos.multiplyScalar(0.9);
         console.log(ratioDiffPos);
-        var newPos = new THREE.Vector3(camtarPos.x + ratioDiffPos.x, camtarPos.y + ratioDiffPos.y, camtarPos.z + ratioDiffPos.z);
+        var newPos = new THREE.Vector3(camtarPos.x + ratioDiffPos.x, camtarPos.y, camtarPos.z + ratioDiffPos.z);
 
         group.position.set(newPos.x, newPos.y, newPos.z);
         group.lookAt(camPos);

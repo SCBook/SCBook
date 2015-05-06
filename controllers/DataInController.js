@@ -54,6 +54,7 @@ exports.scraps_create = function(req, res){
             if(scrap){
                 console.log(scrap.path);
                 User.update(user_query, {$push : {Scraps : scrap._id}}, option, function(){
+                    console.log("send : " + path_scrap);
                     res.send({'state' : 'path', 'path' : path_scrap});
                 });
             }
