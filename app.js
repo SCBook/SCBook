@@ -4,6 +4,10 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var multer = require('multer');
+var fs = require('fs');
+
+var done = false;
 
 require('./db.js').connect();
 var app = express();
@@ -14,11 +18,36 @@ app.set('view engine', 'ejs');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
+
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(multer({ dest: './Userdir/',
+    rename: function (fieldname, filename) {
+        return 'profile_image : ' + filename;
+    },
+    onFileUploadStart: function (file) {
+        console.log(file.originalname + ' is starting ...')
+    },
+    onFileUploadComplete: function (file) {
+        console.log(file.fieldname + ' uploaded to  ' + file.path)
+        done=true;
+    },
+    changeDest: function(dest, req, res) {
+        return dest + req.query.username;
+    }
+}));
+
+app.get('/image-upload', function(req, res){
+    res.render('upload');
+});
+
+app.post('/image-receive', multer({changeDest: function(dest, req, res) {}}, {rename: function(fieldname, filename){}}), function(req, res) {
+    console.log(req.files);
+});
 
 // Configuring Passport
 var passport = require('passport');
@@ -69,6 +98,5 @@ app.use(function(err, req, res, next) {
         error: {}
     });
 });
-
 
 module.exports = app;
