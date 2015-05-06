@@ -75,6 +75,7 @@ SCRAP.DIRECTOR = new SCRAP._initDirector();
 SCRAP._initScene = function() {
 
     SCRAP.DIRECTOR._addScene(new SCRAP.INTRO.Scene(),"intro");
+    SCRAP.DIRECTOR._addScene(new SCRAP.LOBBY.Scene(),"lobby");
     SCRAP.DIRECTOR._addScene(new SCRAP.MAIN1.Scene(),"main");
     SCRAP.DIRECTOR._addScene(new SCRAP.MAIN2.Scene(),"main2");
 
