@@ -221,8 +221,6 @@ module.exports = function(passport){
         dataoutcontroller.word_cloud(req, res);
     });
 
-
-
     router.post('/comment-view', function(req, res, next){
         dataoutcontroller.comment_view(req, res);
     });
@@ -233,10 +231,6 @@ module.exports = function(passport){
 
     router.get('/comment-rm', function(req, res, next){
        cont.comment_rm(req, res);
-    });
-
-    router.get('/weighting', function(req, res, next){
-
     });
 
     router.post('/image', function(req, res, next){
@@ -260,12 +254,5 @@ module.exports = function(passport){
         }
     });
 
-    router.get('/image-upload', function(req, res){
-        res.render('upload',{});
-    });
-
-    router.post('/profile-image', function(req, res){
-        dataincontroller.profile_image(req, res);
-    });
     return router;
 }

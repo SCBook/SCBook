@@ -179,16 +179,10 @@ exports.comment_input = function(req, res){
 }
 
 exports.profile_image = function(req, res){
-    var contact = req.query;
     var name = "hansolchoi";
     var profile_path = './Userdir/'+name+'/image/';
-    fs.readFile(req.files.uploadFile.path, function(err,data){
-       fs.writeFile(profile_path, data, function(error){
-          if(error){
-              throw error;
-          }else{
-              res.send('profile image upload success');
-          }
-       });
-    });
+    req.files.userPhoto.name = name;
+    req.files.userPhoto.path = profile_path;
+
+    console.log(req.files);
 }
