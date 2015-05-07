@@ -176,8 +176,6 @@ SCRAP.MAIN2.mainviewObject = function( t ) {
         null
     );
 
-
-
     var element = new SCRAP.Element('div',
         {
             'className' : 'mainview',

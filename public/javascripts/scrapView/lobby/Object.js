@@ -39,6 +39,7 @@ SCRAP.LOBBY.faceObject = function( length, i ) {
     var object = new THREE.CSS3DObject(root);
     object._width = length;
     object._height = length;
+    object._element = element
 
     return object;
 
@@ -125,8 +126,6 @@ SCRAP.LOBBY.orbitCubeView = function( length, radius ) {
 
     group._init = function() {
 
-        var line = new SCRAP.LOBBY.orbitLineObject( radius );
-        //group.add(line);
 
         var cube = new SCRAP.LOBBY.cubeView( length );
         group.add(cube);
@@ -147,29 +146,82 @@ SCRAP.LOBBY.galaxyView = function( users, weight ) {
 
     var group = new THREE.Group();
 
+    group._wormHole = [];
+    group._spinner = [];
+    group._sphere= [];
+
     group._init = function() {
-var odd = 0;
-        var even = 0;
+
+        // wormHole
+        for (var i=0; i<users.length; i++) {
+            var param = weight[i] / 50;
+            if((Math.floor(Math.random() * 10000) % 2) == 1) {
+                group._wormHole[i] = new THREE.Vector3(weight[i], param * param, 0);
+            } else {
+                group._wormHole[i] = new THREE.Vector3(weight[i], -param * param, 0);
+            }
+
+        }
+
+        // spinner
+        for (var i=0; i<users.length; i++) {
+            var param = (weight[i] - 1500) / 50;
+            if((Math.floor(Math.random() * 10000) % 2) == 1) {
+                group._spinner[i] = new THREE.Vector3( weight[i], -param * param, 0 );
+            } else {
+                group._spiner[i] = new THREE.Vector3( weight[i], param * param, 0 );
+            }
+
+        }
+
+        // sphere
+        for (var i=0; i<users.length; i++) {
+
+        }
+
+        // init
         for(var i=0; i<users.length; i++) {
 
-            var orbitBox = new SCRAP.LOBBY.orbitCubeView(10, (Math.log2(weight[i])));
-            if( Math.floor(Math.random() * 10000) % 2 == 1 ) {
-                odd++
-                orbitBox.position.y = weight[i];
-            }
-            else {
-                even++;
-                orbitBox.position.y = -weight[i];
-            }
+            var orbitBox = new SCRAP.LOBBY.orbitCubeView(10, Math.random() * 5000 + 5000);
+            orbitBox.position.y = Math.random() * 5000 - 2500;
             group.add(orbitBox);
 
         }
-        console.log(even + " , " + odd);
 
+        group._start();
     }
 
     group._update = function() {
-        group.rotateOnAxis(new THREE.Vector3(0,1,0), Math.PI / 100);
+
+        group.rotateOnAxis(new THREE.Vector3(0,1,0), Math.PI / 1440);
+
+    }
+
+    group._start = function() {
+        group._transformation( "wormHole" );
+    }
+
+    group._exit = function() {
+
+    }
+
+    group._transformation = function( to ) {
+
+        for( var i=0; i<users.length; i++) {
+            var delta = Math.random() * 3000 + 1500;
+            new TWEEN.Tween(group.children[i].children[0].position)
+                .to({x : group["_"+to][i].x}, delta)
+                .easing(TWEEN.Easing.Exponential.InOut)
+                .start();
+
+            new TWEEN.Tween(group.children[i].position)
+                .to({y : group["_"+to][i].y }, delta)
+                .easing(TWEEN.Easing.Exponential.InOut)
+                .onComplete(function() {
+                })
+                .start();
+        }
+
     }
 
     group.rotation.z = -Math.PI / 4;

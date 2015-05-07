@@ -7,6 +7,8 @@ SCRAP.LOBBY.Scene = function() {
     var SceneManager = new Object();
     SceneManager.CSSScene;
     SceneManager.CSSRenderer;
+    SceneManager._scroll = 0;
+    SceneManager._curTime = getCurTime();
 
     var freeze;
 
@@ -49,9 +51,9 @@ SCRAP.LOBBY.Scene = function() {
     SceneManager._initObject = function() {
         var user = [];
         var weight = [];
-        for(var i=0; i<50; i++){
+        for(var i=0; i<75; i++){
             user.push(new Object());
-            weight.push(Math.random() * 1000);
+            weight.push(Math.random() * 1500);
         }
         SceneManager.CSSScene.add(new SCRAP.LOBBY.galaxyView(user, weight));
     }
@@ -67,6 +69,9 @@ SCRAP.LOBBY.Scene = function() {
                 return;
             }
         });
+
+        window.addEventListener("wheel", SceneManager.moveObject);
+
     }
 
     SceneManager._animate = function() {
@@ -84,18 +89,32 @@ SCRAP.LOBBY.Scene = function() {
         }
 
         var tempTime = getCurTime();
-        if (tempTime - SceneManager._curTime > 100) {
-
+        if (tempTime - SceneManager._curTime > 50) {
             SceneManager._curTime = tempTime;
-            if (SceneManager._scroll > 0) curScene.children[2]._forward(SceneManager._scroll / 120);
-            else if (SceneManager._scroll < 0) curScene.children[2]._backward(-SceneManager._scroll / 120);
+            if (SceneManager._scroll > 0) SceneManager.zoomEffect( SceneManager._scroll / 120 );
+            else if (SceneManager._scroll < 0) SceneManager.zoomEffect( SceneManager._scroll / 120 );
             SceneManager._scroll = 0;
-
         }
 
         SceneManager._render();
 
+    }
 
+    SceneManager.zoomEffect = function( cnt ) {
+
+        var delta = 100 * cnt;
+
+        new TWEEN.Tween(camera.position)
+            .to({y:camera.position.y + delta},1000)
+            .easing(TWEEN.Easing.Exponential.InOut)
+            .start();
+
+    }
+
+    SceneManager.moveObject = function( event ) {
+        console.log("wheel event");
+        if (!event) event = window.event;
+        SceneManager._scroll += event.wheelDelta;
     }
 
     SceneManager._render = function() {
@@ -124,9 +143,11 @@ SCRAP.LOBBY.Scene = function() {
     }
 
     SceneManager._setCamera = function() {
-        camera.position.set(0, 0, 3000);
+        camera.position.set(0, 0, 1500);
         cameraTarget.set(0,0,0);
     }
+
+
 
     return SceneManager;
 }
