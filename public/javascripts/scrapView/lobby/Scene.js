@@ -51,7 +51,7 @@ SCRAP.LOBBY.Scene = function() {
     SceneManager._initObject = function() {
         var user = [];
         var weight = [];
-        for(var i=0; i<75; i++){
+        for(var i=0; i<500; i++){
             user.push(new Object());
             weight.push(Math.random() * 1500);
         }
@@ -64,7 +64,13 @@ SCRAP.LOBBY.Scene = function() {
             console.log(e.keyCode);
             if (e.keyCode == 32) {
                 freeze = !freeze;
-            } else {
+            } else if(e.keyCode == 49){
+                SceneManager.CSSScene.children[1]._transformation("wormHole");
+
+            } else if(e.keyCode == 50) {
+                SceneManager.CSSScene.children[1]._transformation("spinner");
+            }
+            else {
                 e.keyCode == 0;
                 return;
             }
@@ -105,7 +111,7 @@ SCRAP.LOBBY.Scene = function() {
         var delta = 100 * cnt;
 
         new TWEEN.Tween(camera.position)
-            .to({y:camera.position.y + delta},1000)
+            .to({z:camera.position.z + delta},1000)
             .easing(TWEEN.Easing.Exponential.InOut)
             .start();
 

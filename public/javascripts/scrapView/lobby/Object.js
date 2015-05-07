@@ -68,10 +68,11 @@ SCRAP.LOBBY.cubeView = function( length ) {
 
     group._init = function() {
 
-        for (var i = 0; i < 6; i++) {
-            group.add(new SCRAP.LOBBY.faceObject(length, ''));
-            group.children[i].position.set(group._posList[i].x, group._posList[i].y, group._posList[i].z);
-            group.children[i].rotation.set(group._rotList[i].x, group._rotList[i].y, group._rotList[i].z);
+        for (var i = 2; i < 3; i++) {
+            var face = new SCRAP.LOBBY.faceObject(length, '');
+            face.position.set(group._posList[i].x, group._posList[i].y, group._posList[i].z);
+            face.rotation.set(group._rotList[i].x, group._rotList[i].y, group._rotList[i].z);
+            group.add(face);
         }
 
     }
@@ -154,22 +155,22 @@ SCRAP.LOBBY.galaxyView = function( users, weight ) {
 
         // wormHole
         for (var i=0; i<users.length; i++) {
-            var param = weight[i] / 50;
+            var param = Math.sqrt(weight[i]);
             if((Math.floor(Math.random() * 10000) % 2) == 1) {
-                group._wormHole[i] = new THREE.Vector3(weight[i], param * param, 0);
+                group._wormHole[i] = new THREE.Vector3( weight[i], param * param, 0);
             } else {
-                group._wormHole[i] = new THREE.Vector3(weight[i], -param * param, 0);
+                group._wormHole[i] = new THREE.Vector3( weight[i], -param * param, 0);
             }
 
         }
 
         // spinner
         for (var i=0; i<users.length; i++) {
-            var param = (weight[i] - 1500) / 50;
+            var param = (weight[i] - 1500) / 75;
             if((Math.floor(Math.random() * 10000) % 2) == 1) {
                 group._spinner[i] = new THREE.Vector3( weight[i], -param * param, 0 );
             } else {
-                group._spiner[i] = new THREE.Vector3( weight[i], param * param, 0 );
+                group._spinner[i] = new THREE.Vector3( weight[i], param * param, 0 );
             }
 
         }
@@ -224,7 +225,7 @@ SCRAP.LOBBY.galaxyView = function( users, weight ) {
 
     }
 
-    group.rotation.z = -Math.PI / 4;
+    group.rotation.z = -Math.PI / 8;
 
     group._init();
 
