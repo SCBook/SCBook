@@ -188,6 +188,8 @@
 
         SceneManager._exit = function( chain ) {
 
+            SceneManager.CSSRenderer.domElement.remove();
+
             for(var i=1; i<3; i++) {
                 var child = SceneManager.CSSScene.children[i];
                 child._exit();
