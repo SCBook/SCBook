@@ -8,6 +8,15 @@ var Comment = require('../models/comment.js');
 var fs = require('fs');
 require('date-utils');
 
+function chk(re, e){
+    if(re.test(e)) return true;
+    return false;
+}
+
+var createHash = function(password){
+    return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
+}
+
 // 관리자가 임의로 쉽게 사용자 만들기.
 exports.createUser = function(req, res){
     var username = req.query.username;
@@ -269,4 +278,23 @@ exports.image = function(req, res){
         });
     }
     res.send('Image transfer success.');
+}
+
+exports.username_check = function(req, res){
+    if(!chk(/^[a-z0-9_]{5,12}$/, req)){
+        return "유저네임 형식은 5~12자 영문소문자, 숫자, 특수문자 _ 사용가능.";
+    }else{
+        return "success";
+    }
+}
+
+exports.password_check = function(req, res){
+    var password = req;
+
+    if(!chk(/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-]|.*[0-9]).{6,24}$/, password)){
+        return "비밀번호 형식이 잘못되었습니다 (6~24자 영문대소문자, 숫자, 특수문자 혼합하여 사용).";
+    }else{
+        password = createHash(password);
+        return "success";
+    }
 }

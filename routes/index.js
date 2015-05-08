@@ -3,6 +3,7 @@ var router = express.Router();
 var cont = require('../controllers/cont');
 var dataincontroller = require('../controllers/DataInController');
 var dataoutcontroller = require('../controllers/DataOutController');
+var usercontroller = require('../controllers/UserController');
 
 var http = require('http');
 http.post = require('http-post');
@@ -241,18 +242,8 @@ module.exports = function(passport){
         dataoutcontroller.screenshot_view(req,res);
     });
 
-    router.post('/User-profile', function(req, res, next){
-        var contact = req.query;
-        if( contact.command == 'Create'){
-
-        }else if( contact.command == 'Read'){
-
-        }else if( contact.command == 'Update'){
-
-        }else if( contact.command == 'Delete'){
-
-        }
+    router.get('/user-update', function(req,res, next){
+        usercontroller.UserUpdate(req,res);
     });
-
     return router;
 }

@@ -183,6 +183,7 @@ exports.scrap_read = function(req, res){
 exports.scrap_update = function(req, res){
 
 }
+
 exports.comment_view = function(req, res){
     var contact = req.query;
     var scrap_path = contact.path;
