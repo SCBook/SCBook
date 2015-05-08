@@ -36,6 +36,15 @@ SCRAP.LOBBY.faceObject = function( length, i ) {
         , element
     );
 
+    element.addEventListener("mouseover", function() {
+        element.style.boxShadow = "0px 0px 12px rgba(127,127,0,1)"
+    });
+
+    element.addEventListener("click", function() {
+        console.log("element clicked");
+        object.parent._mouseClicked();
+    });
+
     var object = new THREE.CSS3DObject(root);
     object._width = length;
     object._height = length;
@@ -79,6 +88,10 @@ SCRAP.LOBBY.cubeView = function( length ) {
 
     group._init();
 
+    group._mouseClicked = function() {
+        console.log("cubeView mouseClicked!");
+        group.parent._mouseClicked();
+    }
 
     return group;
 
@@ -127,10 +140,10 @@ SCRAP.LOBBY.orbitCubeView = function( length, radius ) {
 
     group._init = function() {
 
-
         var cube = new SCRAP.LOBBY.cubeView( length );
         group.add(cube);
         cube.position.x = -radius / 2;
+        console.log("pos : " + cube.position.x);
         cube.position.y = length / 2 + 20;
 
     }
@@ -138,6 +151,15 @@ SCRAP.LOBBY.orbitCubeView = function( length, radius ) {
     group.rotation.y = group._theta * Math.random() * 720;
 
     group._init();
+
+    group._mouseClicked = function(pos, rot) {
+        console.log("orbitCubeView mouseClicked!");
+        var cube = group.children[0];
+        console.log(cube.position.x);
+        var pos = new THREE.Vector3(cube.position.x, group.position.y, 0);
+        var rot = new THREE.Vector3(0, group.rotation.y, 0);
+        group.parent._mouseClicked(pos, rot);
+    }
 
     return group;
 
@@ -156,10 +178,15 @@ SCRAP.LOBBY.galaxyView = function( users, weight ) {
         // wormHole
         for (var i=0; i<users.length; i++) {
             var param = Math.sqrt(weight[i]);
+
+            group._wormHole.push({ pos : [], rot : [] });
+
             if((Math.floor(Math.random() * 10000) % 2) == 1) {
-                group._wormHole[i] = new THREE.Vector3( weight[i], param * param, 0);
+                group._wormHole[i].pos = new THREE.Vector3( weight[i], param * param, 0);
+                group._wormHole[i].rot = new THREE.Vector3( 0, 0, 0);
             } else {
-                group._wormHole[i] = new THREE.Vector3( weight[i], -param * param, 0);
+                group._wormHole[i].pos = new THREE.Vector3( weight[i], -param * param, 0);
+                group._wormHole[i].rot = new THREE.Vector3( 0, 0, 0);
             }
 
         }
@@ -167,16 +194,30 @@ SCRAP.LOBBY.galaxyView = function( users, weight ) {
         // spinner
         for (var i=0; i<users.length; i++) {
             var param = (weight[i] - 1500) / 75;
+
+            group._spinner.push({ pos : [], rot : [] });
+
             if((Math.floor(Math.random() * 10000) % 2) == 1) {
-                group._spinner[i] = new THREE.Vector3( weight[i], -param * param, 0 );
+                group._spinner[i].pos = new THREE.Vector3( weight[i], param * param, 0);
+                group._spinner[i].rot = new THREE.Vector3( 0, 0, 0);
             } else {
-                group._spinner[i] = new THREE.Vector3( weight[i], param * param, 0 );
+                group._spinner[i].pos = new THREE.Vector3( weight[i], -param * param, 0);
+                group._spinner[i].rot = new THREE.Vector3( 0, 0, 0);
             }
 
         }
 
         // sphere
         for (var i=0; i<users.length; i++) {
+
+            var row = Math.random() * 2 * Math.PI;
+            var yol = Math.random() * 2 * Math.PI;
+            var pitch = Math.random() * 2 * Math.PI;
+
+            group._sphere.push({ pos : [], rot : [] });
+
+            group._sphere[i].pos = new THREE.Vector3( weight[i], 0, 0);
+            group._sphere[i].rot = new THREE.Vector3( row, yol, pitch );
 
         }
 
@@ -209,23 +250,65 @@ SCRAP.LOBBY.galaxyView = function( users, weight ) {
     group._transformation = function( to ) {
 
         for( var i=0; i<users.length; i++) {
+
             var delta = Math.random() * 3000 + 1500;
+
             new TWEEN.Tween(group.children[i].children[0].position)
-                .to({x : group["_"+to][i].x}, delta)
+                .to({x : group["_"+to][i].pos.x}, delta)
+                .easing(TWEEN.Easing.Exponential.InOut)
+                .start();
+            new TWEEN.Tween(group.children[i].position)
+                .to({ y : group["_"+to][i].pos.y }, delta)
                 .easing(TWEEN.Easing.Exponential.InOut)
                 .start();
 
-            new TWEEN.Tween(group.children[i].position)
-                .to({y : group["_"+to][i].y }, delta)
+            new TWEEN.Tween(group.children[i].rotation)
+                .to({x : group["_"+to][i].rot.x, z : group["_"+to][i].rot.z }, delta)
                 .easing(TWEEN.Easing.Exponential.InOut)
-                .onComplete(function() {
-                })
                 .start();
+
         }
 
     }
 
-    group.rotation.z = -Math.PI / 8;
+    group._mouseClicked = function(pos,rot) {
+        console.log("galaxyView mouseClicked!");
+        var delta = 300;
+        var defaultAxis = -Math.PI / 8;
+        camTargetDestPos = new THREE.Vector3(pos.x, pos.y, 0);
+        camDestPos = new THREE.Vector3(pos.x + delta, pos.y, 0);
+        console.log(camTargetDestPos);
+        console.log(camDestPos);
+        // x:group.position.x + _delta * cnt * Math.cos(Math.PI / 8),
+        // z:group.position.z + _delta * cnt * Math.sin(Math.PI / 8)
+
+        var newX = camDestPos.x * Math.cos(rot.y) + camDestPos.z * Math.sin(rot.y);
+        var newZ = -camDestPos.x * Math.sin(rot.y) + camDestPos.z * Math.cos(rot.y);
+        //var newnewX = newX * Math.cos(defaultAxis) + camDestPos.y * Math.sin(defaultAxis);
+        //var newnewY = -newX * Math.sin(defaultAxis) + camDestPos.y * Math.cos(defaultAxis);
+        camDestPos.x = newX;
+        //camDestPos.y = newnewY;
+        camDestPos.z = newZ;
+        var newTX = camTargetDestPos.x * Math.cos(rot.y) + camTargetDestPos.z * Math.sin(rot.y);
+        var newTZ = -camTargetDestPos.x * Math.sin(rot.y) + camTargetDestPos.z * Math.cos(rot.y);
+        //var newnewTX = newTX * Math.cos(defaultAxis) + camTargetDestPos.y * Math.sin(defaultAxis);
+        //var newnewTY = -newTX * Math.sin(defaultAxis) + camTargetDestPos.y * Math.cos(defaultAxis);
+        camTargetDestPos.x = newTX;
+        //camTargetDestPos.y = newnewTY;
+        camTargetDestPos.z = newTZ;
+        var curScene = SCRAP.DIRECTOR._sceneList["lobby"];
+        curScene._galaxyTog();
+        new TWEEN.Tween(camera.position)
+            .to({x:camDestPos.x, y:camDestPos.y, z:camDestPos.z}, 3000)
+            .easing(TWEEN.Easing.Exponential.InOut)
+            .start();
+        new TWEEN.Tween(cameraTarget)
+            .to({x:camTargetDestPos.x, y:camTargetDestPos.y, z:camTargetDestPos.z}, 3000)
+            .easing(TWEEN.Easing.Exponential.InOut)
+            .start();
+    }
+
+    //group.rotation.z = -Math.PI / 8;
 
     group._init();
 

@@ -10,7 +10,7 @@ SCRAP.LOBBY.Scene = function() {
     SceneManager._scroll = 0;
     SceneManager._curTime = getCurTime();
 
-    var freeze;
+    var freeze = true;
 
     SceneManager._init = function() {
 
@@ -58,17 +58,22 @@ SCRAP.LOBBY.Scene = function() {
         SceneManager.CSSScene.add(new SCRAP.LOBBY.galaxyView(user, weight));
     }
 
+    SceneManager._galaxyTog = function() {
+        //freeze = !freeze;
+    }
+
     SceneManager._initListener = function() {
 
         window.addEventListener("keypress", function hitEnterKey(e) {
             console.log(e.keyCode);
             if (e.keyCode == 32) {
-                freeze = !freeze;
+                SceneManager._galaxyTog();
             } else if(e.keyCode == 49){
                 SceneManager.CSSScene.children[1]._transformation("wormHole");
-
             } else if(e.keyCode == 50) {
                 SceneManager.CSSScene.children[1]._transformation("spinner");
+            } else if(e.keyCode == 51) {
+                SceneManager.CSSScene.children[1]._transformation("sphere");
             }
             else {
                 e.keyCode == 0;
