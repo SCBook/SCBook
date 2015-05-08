@@ -80,8 +80,6 @@ module.exports = function(passport){
                                     newUser.username = username;
                                     newUser.password = password;
                                     newUser.email = req.param('email');
-                                    newUser.ScrapNum = 0;
-                                    newUser.KeywordNum = 0;
 
                                     // 유효하지 않은 계정을 입력받을 때의 처리
                                     if(!regularEx(newUser)){

@@ -6,7 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var multer = require('multer');
 var fs = require('fs');
-
+var UserController = require('./controllers/UserController');
 var done = false;
 
 require('./db.js').connect();
@@ -45,8 +45,9 @@ app.get('/image-upload', function(req, res){
     res.render('upload');
 });
 
-app.post('/image-receive', multer({changeDest: function(dest, req, res) {}}, {rename: function(fieldname, filename){}}), function(req, res) {
-    console.log(req.files);
+app.post('/image-receive', multer({changeDest: function(dest, req, res){}}, {rename: function(fieldname, filename){}}), function(req, res) {
+    //console.log(req.files);
+    UserController.UserUpdate(req, res);
 });
 
 // Configuring Passport
