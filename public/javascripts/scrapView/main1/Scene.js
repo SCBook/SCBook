@@ -9,6 +9,10 @@
 
         var words, weights;
 
+        SceneManager._freeze = function() {
+
+        }
+
         SceneManager._init = function() {
 
             SceneManager._setCamera();

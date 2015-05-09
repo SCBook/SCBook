@@ -2,7 +2,7 @@
  * Created by user on 2015-04-20.
  */
 
-SCRAP.MAIN2.Scene = function() {
+SCRAP.BRANCH.Scene = function() {
 
     var SceneManager = new Object();
     SceneManager.CSSScene;
@@ -14,23 +14,13 @@ SCRAP.MAIN2.Scene = function() {
     SceneManager._camPosStack = [];
     SceneManager._camTgtPosStack = [];
 
-    SceneManager._freeze = function() {
-
-    }
-
     SceneManager._init = function() {
 
         SceneManager._setCamera();
         SceneManager._initScene();
-        //requestScrap(SCRAP.DIRECTOR._curuser, -1, 10);
-        requestScrapImage(SCRAP.DIRECTOR._curuser, -1, 10);
-    }
-
-    SceneManager._postProc = function(rcvData, rcvKeyword, rcvPath, rcvUser, rcvIdx) {
 
         SceneManager._initObject();
         SceneManager._initListener();
-        SceneManager.CSSScene.children[2]._setList(rcvData, rcvKeyword, rcvPath, rcvUser, rcvIdx, true);
 
         var container = document.getElementById("sceneContainer");
 
@@ -77,73 +67,31 @@ SCRAP.MAIN2.Scene = function() {
     }
 
     SceneManager._initObject = function() {
-        SceneManager.CSSScene.add(new SCRAP.MAIN2.FlipView(0, 0, 0, true));
-        SceneManager.CSSScene.add(new SCRAP.MAIN2.circleView(500, 0, -100, true));
-        SceneManager.CSSScene.add(new SCRAP.MAIN2.mainControlView(80, 0, 300, true));
-        SceneManager.CSSScene.add(new SCRAP.MAIN2.commentView(700,50,500));
-        SceneManager.CSSScene.add(new SCRAP.MAIN2.userView(-600,-30,400));
+        var data = [];
+        for(var i=0; i<24; i++) data.push(i);
+        SceneManager.CSSScene.add(SCRAP.BRANCH.FlipViewList(0,0,0,0,15,data));
+        SceneManager.CSSScene.add(SCRAP.BRANCH.FlipViewList(-400, 0, 0, 0, 15, data));
+        SceneManager.CSSScene.add(SCRAP.BRANCH.FlipViewList(400, 0, 0, 0, 15, data));
+        SceneManager.CSSScene.add(SCRAP.BRANCH.IntroControlView(0, 0, 0));
+        SceneManager.CSSScene.add(new SCRAP.BRANCH.circleView(500, 0, -100, true));
+        SceneManager.CSSScene.add(new SCRAP.BRANCH.mainControlView(80, 0, 300, true));
+        SceneManager.CSSScene.add(new SCRAP.BRANCH.commentView(700,50,500));
+        SceneManager.CSSScene.add(new SCRAP.BRANCH.userView(-600,-30,400));
     }
 
     SceneManager._initListener = function() {
-
-        var prevChild = SceneManager.CSSScene.children[1];
-        var mainChild = SceneManager.CSSScene.children[2];
-
-        for (var i = 0; i < prevChild.children.length; i++) {
-            prevChild.children[i].element.addEventListener('mouseover', function (e) {
-                prevChild._flip(e.target._idx);
-            });
-            prevChild.children[i].element.addEventListener('click', function (e) {
-                mainChild._move(e.target._idx);
-            });
-        }
-
-        var controlView = SceneManager.CSSScene.children[3];
+        var controlView = SceneManager.CSSScene.children[6];
         var commentBut = controlView.children[0];
         commentBut.element.addEventListener('click', function (e) {
-            SceneManager.CSSScene.children[4]._start();
+            SceneManager.CSSScene.children[7]._start();
         });
 
-        var controlView = SceneManager.CSSScene.children[3];
+        var controlView = SceneManager.CSSScene.children[6];
         var userBut = controlView.children[1];
         userBut.element.addEventListener('click', function (e) {
-            SceneManager.CSSScene.children[5]._start();
-        });
-
-        var commentInput = SceneManager.CSSScene.children[4];
-        console.log(commentInput.children[1]);
-        commentInput.children[1].children[0].element.addEventListener("keypress", function hitEnterKey(e) {
-            console.log(e.keyCode);
-            if (e.keyCode == 13) {
-                var input = commentInput.children[1].children[0]._getInput();
-                commentInput.children[1].children[0]._reset();
-
-                var curScene = SCRAP.DIRECTOR._sceneList["main2"]
-                var curView = curScene.CSSScene.children[2];
-                var curIdx = curView._selec;
-                var path = curView.children[curIdx]._path;
-
-                sendComment(path,input,SCRAP.DIRECTOR._curuser);
-            } else {
-                e.keyCode == 0;
-                return;
-            }
-        });
-
-        window.addEventListener("keypress", function hitEnterKey(e) {
-            console.log(e.keyCode);
-            if (e.keyCode == 113) {
-                var curScene = SCRAP.DIRECTOR._sceneList["main2"]
-                var curView = curScene.CSSScene.children[6];
-                if (curView._enable) {
-                    curView._exit();
-                } else {
-                    curView._start();
-                }
-            } else {
-                e.keyCode == 0;
-                return;
-            }
+            var curView = SceneManager.CSSScene.children[5];
+            var username = curView.children[curView._selec]._user;
+            SceneManager.CSSScene.children[8]._start(username);
         });
     }
 
@@ -231,6 +179,7 @@ SCRAP.MAIN2.Scene = function() {
         var newTgtPos = SceneManager._camTgtPosStack.pop();
         SceneManager._moveCamera(newCamPos, newTgtPos, true);
     }
+
 
     return SceneManager;
 }

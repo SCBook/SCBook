@@ -108,7 +108,7 @@ function requestScrapImage ( username, start, end, type) {
     {
         if (xmlhttp.readyState==4 && xmlhttp.status==200)
         {
-            var curScene = SCRAP.DIRECTOR._sceneList["main2"];
+            var curScene = SCRAP.DIRECTOR._sceneList["branch"];
             var child = curScene.CSSScene.children[2];
             console.log(xmlhttp.responseText);
             var jsonObj = JSON.parse(xmlhttp.responseText);
@@ -131,9 +131,9 @@ function requestScrapImage ( username, start, end, type) {
                 rcvUser.push(jsonObj[i].username);
                 rcvIdx.push(jsonObj[i].index);
             }
-            if(start < 0) curScene._postProc(rcvData, rcvKeyword, rcvPath, rcvUser, rcvIdx);
-            else if(type=="old") curScene.CSSScene.children[2]._setList(rcvData, rcvKeyword, rcvPath, rcvUser, rcvIdx, true);
-            else curScene.CSSScene.children[2]._setList(rcvData, rcvKeyword, rcvPath, rcvUser, rcvIdx, false);
+            //if(start < 0) curScene._postProc(rcvData, rcvKeyword, rcvPath, rcvUser, rcvIdx);
+            if(type=="old") curScene.CSSScene.children[5]._setList(rcvData, rcvKeyword, rcvPath, rcvUser, rcvIdx, true);
+            else curScene.CSSScene.children[5]._setList(rcvData, rcvKeyword, rcvPath, rcvUser, rcvIdx, false);
         }
         else {
             console.log("no recived");
@@ -164,11 +164,14 @@ function requestComment ( path, number ) {
             var jsonObj = JSON.parse(xmlhttp.responseText);
             var resArr = [];
             for (var i=0; i<jsonObj.length; i++){
-                var curContent = jsonObj[i].contents;
+                var curContent = {
+                    "post_name" : jsonObj[i].post_name,
+                    "contents" :jsonObj[i].contents
+                };
                 resArr.push(curContent);
             }
-            var curScene = SCRAP.DIRECTOR._sceneList["main2"].CSSScene;
-            var child = curScene.children[4].children[0];
+            var curScene = SCRAP.DIRECTOR._sceneList["branch"].CSSScene;
+            var child = curScene.children[7].children[0];
             child._add(resArr);
         }
     }
@@ -197,10 +200,9 @@ function sendComment ( path, data, username ) {
         {
             console.log("rcved!!!");
             console.log(xmlhttp.responseText);
-            var curScene = SCRAP.DIRECTOR._sceneList["main2"].CSSScene;
-            var child = curScene.children[4].children[0];
+            var curScene = SCRAP.DIRECTOR._sceneList["branch"].CSSScene;
+            var child = curScene.children[7].children[0];
             child._start();
-
         }
     }
     xmlhttp.open("POST","./comment-input?path="+path+"&data="+data+"&username="+username,true);
@@ -211,3 +213,51 @@ function sendComment ( path, data, username ) {
 // 스크랩 데이터를 스크랩하는 기능
 
 // 스크랩 데이터의 사용자를 팔로우 하는 기능
+
+function requestFriend( username, myName, callback) {
+    setTimeout(callback, 1000);
+}
+
+
+function requestUnfriend( username, myName, callback) {
+    setTimeout(callback, 1000);
+}
+
+function requestUser( username ) {
+
+    var userData = {
+        "comment" : "오늘도 즐겁게",
+        "scraps" : "1,233,543",
+        "user": "hansolchoi"
+    }
+    var words = [
+        "브라보브라보",
+        "브라보브라보",
+        "브라보브라보",
+        "브라보브라보",
+        "브라보브라보",
+        "브라보브라보",
+        "브라보브라보",
+        "브라보브라보",
+        "브라보브라보",
+        "브라보브라보"
+    ];
+    var weights = [
+        0.9,
+        0.8,
+        0.7,
+        0.6,
+        0.6,
+        0.6,
+        0.5,
+        0.5,
+        0.4,
+        0.4
+    ];
+    var flag = false;
+
+    var curScene = SCRAP.DIRECTOR._sceneList["branch"].CSSScene;
+    var child = curScene.children[8];
+    child._afterStart(userData, words, weights, flag);
+
+}
