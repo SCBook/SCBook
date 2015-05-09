@@ -8,4 +8,5 @@ module.exports = mongoose.model('keyword', {
     weight : { type : Number },
     path : { type : String },
     keyword_date : { type : String },
+    parents_path : { type : String }
 });

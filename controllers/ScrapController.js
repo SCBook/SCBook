@@ -138,10 +138,6 @@ var ScreenShotDelete = function(path_image){
 exports.ScrapCreate = function(req, res){
     var contact = req.body;
 
-    /*
-    * Scrap모델 안의 Keyword역시 _id로 관리되어야 한다.
-    * 현재는 keyword와 scrap의 관계가 없다.
-    * */
     var user = contact.username;
     var url = contact.url;
     var keyword1 = contact.keyword1;
@@ -159,6 +155,7 @@ exports.ScrapCreate = function(req, res){
     if(path_scrap == "null"){
         path_scrap = './Userdir/'+user+'/scrap-'+keyword1+keyword2+keyword3+'-'+dt;
 
+        // 키워드 식별자
         var path_keyword1 = './Userdir/'+user+'/scrap-path:'+path_scrap+"-"+keyword1;
         var path_keyword2 = './Userdir/'+user+'/scrap-path:'+path_scrap+"-"+keyword2;
         var path_keyword3 = './Userdir/'+user+'/scrap-path:'+path_scrap+"-"+keyword3;
@@ -173,9 +170,12 @@ exports.ScrapCreate = function(req, res){
         var keyword_query1 = { path : path_keyword1 };
         var keyword_query2 = { path : path_keyword2 };
         var keyword_query3 = { path : path_keyword3 };
-        var keyword_update1 = {$set : {keyword_name : keyword1, keyword_date : dt, path : path_keyword1}};
-        var keyword_update2 = {$set : {keyword_name : keyword2, keyword_date : dt, path : path_keyword2}};
-        var keyword_update3 = {$set : {keyword_name : keyword3, keyword_date : dt, path : path_keyword3}};
+        var keyword_update1 = {$set : {keyword_name : keyword1, keyword_date : dt, path : path_keyword1,
+            parents_path : path_scrap}};
+        var keyword_update2 = {$set : {keyword_name : keyword2, keyword_date : dt, path : path_keyword2,
+            parents_path : path_scrap}};
+        var keyword_update3 = {$set : {keyword_name : keyword3, keyword_date : dt, path : path_keyword3,
+            parents_path : path_scrap}};
 
         // 스크랩한 내용을 Scrap모델에 넣는다.
         Scrap.update(scrap_query, scrap_update, option, function(){
