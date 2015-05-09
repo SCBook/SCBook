@@ -215,15 +215,15 @@ function sendComment ( path, data, username ) {
 // 스크랩 데이터의 사용자를 팔로우 하는 기능
 
 function requestFriend( username, myName, callback) {
-    setTimeout(callback, 1000);
+    setTimeout(callback, 300);
 }
 
 
 function requestUnfriend( username, myName, callback) {
-    setTimeout(callback, 1000);
+    setTimeout(callback, 300);
 }
 
-function requestUser( username ) {
+function requestUser( username, curUser ) {
 
     var userData = {
         "comment" : "오늘도 즐겁게",
@@ -256,8 +256,31 @@ function requestUser( username ) {
     ];
     var flag = false;
 
-    var curScene = SCRAP.DIRECTOR._sceneList["branch"].CSSScene;
-    var child = curScene.children[8];
-    child._afterStart(userData, words, weights, flag);
+    var xmlhttp;
+    if (window.XMLHttpRequest)
+    {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp=new XMLHttpRequest();
+    }
+    else
+    {// code for IE6, IE5
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange=function()
+    {
+        if (xmlhttp.readyState==4 && xmlhttp.status==200)
+        {
+            console.log("rcved!!!");
+            console.log(xmlhttp.responseText);
 
+            var curScene = SCRAP.DIRECTOR._sceneList["branch"].CSSScene;
+            var child = curScene.children[8];
+            child._afterStart(userData, words, weights, flag);
+        }
+    }
+    xmlhttp.open("POST","./user?command=read&username="+username+"&curUser="+curUser,true);
+    xmlhttp.send();
+
+    // username, scraps, comment, - userData
+    // words, weight( 0 ~ 1 )
+    // flag ( username, reader )
 }

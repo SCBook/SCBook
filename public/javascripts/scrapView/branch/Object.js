@@ -345,6 +345,10 @@ SCRAP.BRANCH.FlipViewList = function(x, y, z , rot, size, data) {
             .start();
     }
 
+    group._toSimpleMode = function() {
+
+    }
+
     group._exit = function() {
         console.log("exit");
         for(var i=0; i<group.children.length; i++) {
@@ -1859,7 +1863,7 @@ SCRAP.BRANCH.userView = function(x, y, z) {
     }
 
     group._start = function( username ) {
-        requestUser( username );
+        requestUser( username, SCRAP.DIRECTOR._curuser );
     }
 
     group._afterStart = function(userData, words, weights, flag) {
