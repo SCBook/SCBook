@@ -194,46 +194,50 @@ exports.scraps = function(req, res){
     console.log(path_scrap);
 
     // 스크랩한 내용을 Scrap모델에 넣는다.
-    Scrap.update(scrap_query, scrap_update, option, function(){});
-    // 위에서 넣은 스크랩 내용의 _id를 찾는다.
-    Scrap.findOne(scrap_query, function(err, scrap){
-        // 찾은 _id를 유저의 Scraps필드에 넣는다.
-        if(scrap){
-            User.update(user_query, {$push : {Scraps : scrap._id}}, option, function(){});
-        }else{
-            console.log('유저모델에 스크랩_id넣는데 실패했어. :' +scrap_query.path);
-        }
+    Scrap.update(scrap_query, scrap_update, option, function(){
+        // 위에서 넣은 스크랩 내용의 _id를 찾는다.
+        Scrap.findOne(scrap_query, function(err, scrap){
+            // 찾은 _id를 유저의 Scraps필드에 넣는다.
+            if(scrap){
+                User.update(user_query, {$push : {Scraps : scrap._id}}, option, function(){});
+            }else{
+                console.log('유저모델에 스크랩_id넣는데 실패했어. :' +scrap_query.path);
+            }
+        });
     });
 
     // 스크랩한 내용을 Keyword모델에 넣는다.
     if(keyword1){
-        Keyword.update( keyword_query1, keyword_update1, option, function(){} );
-        Keyword.findOne({'path' : path_keyword1}, function(err, keyword){
-            if(keyword){
-                User.update(user_query,{$push : {Keywords : keyword._id}}, option,function(){});
-            }else{
-                console.log('키워드1를 유저에 넣는데 실패했어 : ' +path_keyword1);
-            }
-        });
+        Keyword.update( keyword_query1, keyword_update1, option, function(){
+            Keyword.findOne({'path' : path_keyword1}, function(err, keyword){
+                if(keyword){
+                    User.update(user_query,{$push : {Keywords : keyword._id}}, option,function(){});
+                }else{
+                    console.log('키워드1를 유저에 넣는데 실패했어 : ' +path_keyword1);
+                }
+            });
+        } );
     }
     if(keyword2){
-        Keyword.update( keyword_query2, keyword_update2, option,function () {} );
-        Keyword.findOne({'path' : path_keyword2}, function(err, keyword){
-            if(keyword){
-                User.update(user_query,{$push : {Keywords : keyword._id}}, option,function(){});
-            }else{
-                console.log('키워드2를 유저에 넣는데 실패했어 : ' +path_keyword2);
-            }
-        });
+        Keyword.update( keyword_query2, keyword_update2, option,function () {
+            Keyword.findOne({'path' : path_keyword2}, function(err, keyword){
+                if(keyword){
+                    User.update(user_query,{$push : {Keywords : keyword._id}}, option,function(){});
+                }else{
+                    console.log('키워드2를 유저에 넣는데 실패했어 : ' +path_keyword2);
+                }
+            });
+        } );
     }
     if(keyword3){
-        Keyword.update( keyword_query3, keyword_update3, option,function () {} );
-        Keyword.findOne({'path' : path_keyword3}, function(err, keyword){
-            if(keyword){
-                User.update(user_query,{$push : {Keywords : keyword._id}}, option,function(){});
-            }else{
-                console.log('키워드3를 유저에 넣는데 실패했어 : ' +path_keyword3);
-            }
+        Keyword.update( keyword_query3, keyword_update3, option,function () {
+            Keyword.findOne({'path' : path_keyword3}, function(err, keyword){
+                if(keyword){
+                    User.update(user_query,{$push : {Keywords : keyword._id}}, option,function(){});
+                }else{
+                    console.log('키워드3를 유저에 넣는데 실패했어 : ' +path_keyword3);
+                }
+            });
         });
     }
     // 파일 저장
@@ -297,4 +301,13 @@ exports.password_check = function(req, res){
         password = createHash(password);
         return "success";
     }
+}
+
+exports.for_test = function(req, res){
+    var arr = [1, 2, 3 , 4, 5, 6, 7, 8];
+
+    for(var i=0; i<arr.length; i++){
+        console.log(arr[i]);
+    }
+    res.send(arr);
 }

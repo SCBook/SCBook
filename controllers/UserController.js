@@ -3,7 +3,7 @@
  */
 var User = require('../models/user.js');
 var cont = require('../controllers/cont');
-
+var fs = require('fs');
 require('date-utils');
 
 exports.UserUpdate = function(req, res){
@@ -17,6 +17,8 @@ exports.UserUpdate = function(req, res){
         username_message = cont.username_check(change_username);
         if(username_message == 'success'){
             User.update({'username':origin_username},{$set:{'username':change_username}},{upsert:false},function(){});
+            // Userdir안에 디렉토리 이름도 바꿔준다. But, 파일이름은 그대로.
+            fs.rename('./Userdir/'+origin_username, './Userdir/'+change_username, function(){});
         }else{
             error_message += username_message + ' ';
         }
