@@ -4,6 +4,7 @@ var cont = require('../controllers/cont');
 var dataincontroller = require('../controllers/DataInController');
 var dataoutcontroller = require('../controllers/DataOutController');
 var usercontroller = require('../controllers/UserController');
+var scrapcontroller = require('../controllers/ScrapController');
 
 var http = require('http');
 http.post = require('http-post');
@@ -244,6 +245,10 @@ module.exports = function(passport){
 
     router.get('/user-update', function(req,res, next){
         usercontroller.UserUpdate(req,res);
+    });
+
+    router.get('/scrap-remove', function(req, res, next){
+        scrapcontroller.ScrapDelete(req, res);
     });
     return router;
 }
