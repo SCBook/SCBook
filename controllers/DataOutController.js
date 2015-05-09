@@ -83,6 +83,7 @@ exports.screenshot_view = function(req, res){
                     if (pass_state) {
                         pass_state = false;
                         Scrap.findOne({'_id': user.Scraps[i]}, function (err, scrap) {
+
                             console.log('=================== scrap ==================');
                              console.log(scrap);
                             if (scrap) {

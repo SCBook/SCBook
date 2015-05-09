@@ -77,7 +77,7 @@ SCRAP.LOBBY.cubeView = function( length ) {
 
     group._init = function() {
 
-        for (var i = 2; i < 3; i++) {
+        for (var i = 4; i < 5; i++) {
             var face = new SCRAP.LOBBY.faceObject(length, '');
             face.position.set(group._posList[i].x, group._posList[i].y, group._posList[i].z);
             face.rotation.set(group._rotList[i].x, group._rotList[i].y, group._rotList[i].z);
@@ -143,7 +143,6 @@ SCRAP.LOBBY.orbitCubeView = function( length, radius ) {
         var cube = new SCRAP.LOBBY.cubeView( length );
         group.add(cube);
         cube.position.x = -radius / 2;
-        console.log("pos : " + cube.position.x);
         cube.position.y = length / 2 + 20;
 
     }
@@ -249,6 +248,8 @@ SCRAP.LOBBY.galaxyView = function( users, weight ) {
 
     group._transformation = function( to ) {
 
+        var tw = null;
+
         for( var i=0; i<users.length; i++) {
 
             var delta = Math.random() * 3000 + 1500;
@@ -297,7 +298,6 @@ SCRAP.LOBBY.galaxyView = function( users, weight ) {
         //camTargetDestPos.y = newnewTY;
         camTargetDestPos.z = newTZ;
         var curScene = SCRAP.DIRECTOR._sceneList["lobby"];
-        curScene._galaxyTog();
         new TWEEN.Tween(camera.position)
             .to({x:camDestPos.x, y:camDestPos.y, z:camDestPos.z}, 3000)
             .easing(TWEEN.Easing.Exponential.InOut)

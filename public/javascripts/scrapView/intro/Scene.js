@@ -8,6 +8,8 @@
         SceneManager.CSSScene;
         SceneManager.CSSRenderer;
 
+        SceneManager._freezeFlag = false;
+
         /*
          CSSScene.children
          0 - camera
@@ -19,20 +21,42 @@
          6 - 2nd menu list
          */
 
+        SceneManager._freeze = function() {
+
+        }
+
         SceneManager._preProc = function() {
             sessionCheck();
         }
 
         SceneManager._init = function() {
+
             if(SCRAP.DIRECTOR.curuser == null) {
                 SceneManager._preProc();
             }
+
             SceneManager._setCamera();
             SceneManager._initScene();
             SceneManager._initObject();
             SceneManager._initListener();
 
-            document.body.appendChild(SceneManager.CSSRenderer.domElement);
+            var container = document.getElementById("sceneContainer");
+
+            if(container == null) {
+                container = document.createElement('div');
+                container.id = "sceneContainer";
+                document.body.appendChild(container);
+            }
+
+            if(container.children.length > 0) {
+                var len = container.children.length;
+                for( var i=0; i<len; i++) {
+                    var temp = container.children[0];
+                    temp.remove();
+                }
+            }
+            container.appendChild( SceneManager.CSSRenderer.domElement );
+
             window.addEventListener('resize', onWindowResize, true);
 
             function onWindowResize() {
@@ -164,6 +188,7 @@
             SCRAP.Fader.update();
 
             SceneManager._render();
+
         }
 
         SceneManager._render = function() {

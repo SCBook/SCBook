@@ -1,20 +1,23 @@
 /**
- * Created by redball on 15. 5. 6.
+ * Created by user on 2015-04-20.
  */
 
-SCRAP.LOBBY.Scene = function() {
+SCRAP.MENU.Scene = function() {
 
     var SceneManager = new Object();
     SceneManager.CSSScene;
     SceneManager.CSSRenderer;
+
     SceneManager._scroll = 0;
     SceneManager._curTime = getCurTime();
 
-    SceneManager._freezeFlag = false;
+    SceneManager._camPosStack = [];
+    SceneManager._camTgtPosStack = [];
 
-    SceneManager._freeze = function() {
-        SceneManager._freezeFlag = !SceneManager._freezeFlag;
-    }
+    var camera = new THREE.PerspectiveCamera(45, width / height, 1, 15000);
+    camera.position.set(0, 500, 3000);
+
+    var cameraTarget = new THREE.Vector3(0,500,0);
 
     SceneManager._init = function() {
 
@@ -23,11 +26,11 @@ SCRAP.LOBBY.Scene = function() {
         SceneManager._initObject();
         SceneManager._initListener();
 
-        var container = document.getElementById("sceneContainer");
+        var container = document.getElementById("menuContainer");
 
         if(container == null) {
             container = document.createElement('div');
-            container.id = "sceneContainer";
+            container.id = "menuContainer";
             document.body.appendChild(container);
         }
 
@@ -55,7 +58,7 @@ SCRAP.LOBBY.Scene = function() {
     }
 
     SceneManager._initScene = function() {
-
+        console.log()
         var width = window.innerWidth;
         var height = window.innerHeight;
 
@@ -64,92 +67,71 @@ SCRAP.LOBBY.Scene = function() {
         SceneManager.CSSRenderer.domElement.style.position = 'absolute';
         SceneManager.CSSRenderer.domElement.style.top = '0px';
         SceneManager.CSSScene = new THREE.Scene();
+        console.log(SceneManager.CSSScene.children.length);
         SceneManager.CSSScene.add(camera);
+        console.log(SceneManager.CSSScene.children.length);
 
     }
 
     SceneManager._initObject = function() {
-        var user = [];
-        var weight = [];
-        for(var i=0; i<500; i++){
-            user.push(new Object());
-            weight.push(Math.random() * 1500);
-        }
-        SceneManager.CSSScene.add(new SCRAP.LOBBY.galaxyView(user, weight));
+        SceneManager.CSSScene.add(new SCRAP.MENU.settingView(0, 350, 500));
+        console.log(SceneManager.CSSScene.children.length);
     }
 
     SceneManager._initListener = function() {
-
+        console.log(SceneManager.CSSScene.children.length);
         window.addEventListener("keypress", function hitEnterKey(e) {
             console.log(e.keyCode);
-            if (e.keyCode == 32) {
-                SceneManager._freeze();
-            } else if(e.keyCode == 49){
-                SceneManager.CSSScene.children[1]._transformation("wormHole");
-            } else if(e.keyCode == 50) {
-                SceneManager.CSSScene.children[1]._transformation("spinner");
-            } else if(e.keyCode == 51) {
-                SceneManager.CSSScene.children[1]._transformation("sphere");
-            }
-            else {
+            if (e.keyCode == 113) {
+                var curScene = SCRAP.DIRECTOR._sceneList["menu"];
+                console.log(SceneManager.CSSScene.children.length);
+                var curView = curScene.CSSScene.children[1];
+                console.log(curScene);
+                SCRAP.DIRECTOR._freezeScene();
+                if (curView._enable) {
+                    curView._exit();
+                } else {
+                    curView._start();
+                }
+            } else {
                 e.keyCode == 0;
                 return;
             }
         });
+    }
 
-        window.addEventListener("wheel", SceneManager.moveObject);
-
+    SceneManager.moveObject = function( event ) {
+        if (!event) event = window.event;
+        SceneManager._scroll += event.wheelDelta;
     }
 
     SceneManager._animate = function() {
 
-        requestAnimationFrame( SceneManager._animate);
-
-        if(SceneManager._freezeFlag) return;
-
         var curScene = SceneManager.CSSScene;
+
+        requestAnimationFrame( SceneManager._animate);
 
         TWEEN.update();
         SCRAP.Fader.update();
         SCRAP.Resizer.update();
 
-        curScene.children[1]._update();
-
         var tempTime = getCurTime();
-        if (tempTime - SceneManager._curTime > 50) {
+        if (tempTime - SceneManager._curTime > 100) {
+
             SceneManager._curTime = tempTime;
-            if (SceneManager._scroll > 0) SceneManager.zoomEffect( SceneManager._scroll / 120 );
-            else if (SceneManager._scroll < 0) SceneManager.zoomEffect( SceneManager._scroll / 120 );
+            if (SceneManager._scroll > 0) curScene.children[2]._forward(SceneManager._scroll / 120);
+            else if (SceneManager._scroll < 0) curScene.children[2]._backward(-SceneManager._scroll / 120);
             SceneManager._scroll = 0;
         }
 
         SceneManager._render();
-
-    }
-
-    SceneManager.zoomEffect = function( cnt ) {
-
-        var delta = 100 * cnt;
-
-        new TWEEN.Tween(camera.position)
-            .to({z:camera.position.z + delta},1000)
-            .easing(TWEEN.Easing.Exponential.InOut)
-            .start();
-
-    }
-
-    SceneManager.moveObject = function( event ) {
-        console.log("wheel event");
-        if (!event) event = window.event;
-        SceneManager._scroll += event.wheelDelta;
     }
 
     SceneManager._render = function() {
-
+        console.log("menu render");
         camera.lookAt(cameraTarget);
 
         SceneManager.CSSRenderer.render(SceneManager.CSSScene, camera);
-
     }
 
     function getCurTime() {
@@ -159,6 +141,8 @@ SCRAP.LOBBY.Scene = function() {
 
     SceneManager._start = function( chain ) {
 
+        console.log("start");
+
         SceneManager._init();
         SceneManager._animate();
 
@@ -166,15 +150,18 @@ SCRAP.LOBBY.Scene = function() {
 
     SceneManager._exit = function( chain ) {
 
+        for(var i=1; i<SceneManager.CSSScene.children.length; i++) {
+            console.log(i);
+            SceneManager.CSSScene.children[i]._exit();
+        }
+
         setTimeout(chain, 500);
     }
 
     SceneManager._setCamera = function() {
-        camera.position.set(0, 0, 1500);
-        cameraTarget.set(0,0,0);
+        camera.position.set(0, 500, 6500);
+        cameraTarget.set(0,250,0);
     }
-
-
 
     return SceneManager;
 }

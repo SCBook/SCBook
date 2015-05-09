@@ -66,6 +66,14 @@ SCRAP._initDirector = function()
 
     }
 
+    director._freezeScene = function() {
+        var sceneList = ["intro", "lobby", "main", "main2"];
+
+        for(var i=0; i<sceneList.length; i++) {
+            SCRAP.DIRECTOR._sceneList[sceneList[i]]._freeze();
+        }
+    }
+
     return director;
 
 }
@@ -76,10 +84,12 @@ SCRAP._initScene = function() {
 
     SCRAP.DIRECTOR._addScene(new SCRAP.INTRO.Scene(),"intro");
     SCRAP.DIRECTOR._addScene(new SCRAP.LOBBY.Scene(),"lobby");
-    SCRAP.DIRECTOR._addScene(new SCRAP.MAIN1.Scene(),"main");
-    SCRAP.DIRECTOR._addScene(new SCRAP.MAIN2.Scene(),"main2");
+    SCRAP.DIRECTOR._addScene(new SCRAP.BRANCH.Scene(),"branch");
 
     SCRAP.DIRECTOR._init();
 
 }
+
+
+
 SCRAP._initScene();
