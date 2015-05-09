@@ -2,7 +2,7 @@
  * Created by hansol on 15. 5. 8.
  */
 var User = require('../models/user.js');
-var cont = require('../controllers/cont');
+var manager = require('../controllers/Manager');
 var fs = require('fs');
 require('date-utils');
 
@@ -14,7 +14,7 @@ exports.UserUpdate = function(req, res){
     var error_message='';
 
     if(change_username){
-        username_message = cont.username_check(change_username);
+        username_message = manager.username_check(change_username);
         if(username_message == 'success'){
             User.update({'username':origin_username},{$set:{'username':change_username}},{upsert:false},function(){});
             // Userdir안에 디렉토리 이름도 바꿔준다. But, 파일이름은 그대로.
@@ -24,7 +24,7 @@ exports.UserUpdate = function(req, res){
         }
     }
     if(req.query.password){
-        password_message = cont.password_check(req.query.password);
+        password_message = manager.password_check(req.query.password);
         if(password_message == 'success'){
             var password = createHash(req.query.password);
             User.update({'username':origin_username},{$set:{'password':password}},{upsert:false},function(){});
@@ -48,6 +48,14 @@ exports.UserUpdate = function(req, res){
         res.send(error_message);
     }else{
         res.send('success');
+    }
+    if(req.query.friend){
+        /*User.findOne({'username':origin_username}, function(err, user){
+            for(var i=0; i<user.friends.length; i++){
+                if()
+            }
+        })*/
+        User.update({'username':origin_username}, {$push:{'friends':req.query.friend}}, {upsert:true}, function(){});
     }
 }
 

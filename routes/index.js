@@ -1,8 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var cont = require('../controllers/cont');
-var dataincontroller = require('../controllers/DataInController');
-var dataoutcontroller = require('../controllers/DataOutController');
+
+var manager = require('../controllers/Manager');
 var usercontroller = require('../controllers/UserController');
 var scrapcontroller = require('../controllers/ScrapController');
 
@@ -75,108 +74,6 @@ module.exports = function(passport){
         res.send(_res);
     });
 
-    router.get('/createUser', function(req, res, next){
-        cont.createUser(req, res);
-    });
-
-    router.get('/all-users', function(req, res, next){
-        cont.listUser(req, res);
-    });
-
-    router.get('/all-remove', function(req, res, next){
-        cont.removeAll(req, res);
-    });
-
-    // Java Server에서 보내는 데이터를 임시로 만들었음.
-    // 이 명령 후 2분후에 events.js:72 throw er; // Unhandled 'error' event 발생
-    // 에러 내용은 두 개의 터미널에서 같은 포트로 Node.js의 웹을 실행할 때 발생한다고 한다.
-    // 분명 터미널은 하나만 틀었는데 이런 문제가 발생하는 것을 보면 아래의 코드에서 터미널을 강제로 발생시키고 종료시키지 않은 것 같다.
-    router.get('/post1', function(req, res, next){
-        var username = "hansolchoi";
-        fs.readFile('./webscrap/dumy1.html', 'utf8', function(err, data){
-            if(err){
-                throw err;
-            }else{
-                var scrap = {
-                    username : username,
-                    keyword1: "컴퓨터 시스템",
-                    keyword2: "운영체제",
-                    url:"http://navercast.naver.com/contents.nhn?rid=47&contents_id=865031",
-                    scrap_data : data
-                }
-                http.post('http://localhost:3000/scraps',scrap, function(res){
-                    return res;
-                });
-            }
-        });
-        fs.readFile('./webscrap/dumy2.html', 'utf8', function(err, data){
-            if(err){
-                throw err;
-            }else{
-                var scrap = {
-                    username : username,
-                    keyword1: '운영체제',
-                    keyword3 : "수분",
-                    url:"http://navercast.naver.com/contents.nhn?rid=47&contents_id=865034",
-                    scrap_data : data
-                }
-                http.post('http://localhost:3000/scraps',scrap, function(res){
-                    return res;
-                });
-            }
-        });
-        fs.readFile('./webscrap/dumy3.html', 'utf8', function(err, data){
-            if(err){
-                throw err;
-            }else{
-                var scrap = {
-                    username : username,
-                    keyword1: "운영체제",
-                    Keyword2: "운영체제",
-                    keyword3: "모니터",
-
-                    url:"http://navercast.naver.com/contents.nhn?rid=47&contents_id=865035",
-                    scrap_data : data
-                }
-                http.post('http://localhost:3000/scraps',scrap, function(res){
-                    return res;
-                });
-            }
-        });
-        fs.readFile('./webscrap/dumy4.html', 'utf8', function(err, data){
-            if(err){
-                throw err;
-            }else{
-                var scrap = {
-                    username : username,
-                    keyword1: "아이유",
-                    url:"http://navercast.naver.com/contents.nhn?rid=47&contents_id=865036",
-                    scrap_data : data
-                }
-                http.post('http://localhost:3000/scraps',scrap, function(res){
-                    return res;
-                });
-            }
-        });
-        fs.readFile('./webscrap/dumy5.html', 'utf8', function(err, data){
-            if(err){
-                throw err;
-            }else{
-                var scrap = {
-                    username : username,
-                    keyword1: "노트북",
-
-                    url:"http://navercast.naver.com/contents.nhn?rid=47&contents_id=865037",
-                    scrap_data : data
-                }
-                http.post('http://localhost:3000/scraps',scrap, function(res){
-                    return res;
-                });
-            }
-        });
-        res.redirect('/list-scrap');
-    });
-
     // 회원가입
     router.post('/signup', passport.authenticate('signup', {
         successRedirect: '/signup-success',
@@ -193,62 +90,56 @@ module.exports = function(passport){
         return res.send(_res);
     });
 
+    router.get('/manager', function(req, res, next){
+        var command = req.query.command;
 
-    router.get('/list-scrap', function(req, res, next){
-        cont.listScrap(req, res);
+        if(command == 'user-list'){
+            manager.listUser(req, res);
+        }else if(command == 'scrap-list'){
+            manager.listScrap(req, res);
+        }else if(command == 'keyword-list'){
+            manager.listKeyword(req, res);
+        }else if(command == 'all-remove'){
+            manager.removeAll(req, res);
+        }
     });
 
-    router.get('/list-keyword', function(req, res, next){
-        cont.listKeyword(req, res);
+    router.post('/User', function(req, res, next){
+        var command = req.query.command;
+
+        if(command == 'update'){
+            usercontroller.UserUpdate(req, res);
+        }else if(command == 'read'){
+            usercontroller.UserRead(req, res);
+        }else if(command == 'delete'){
+            usercontroller.UserDelete(req,res);
+        }
     });
 
-    router.post('/scrap', isAuthenticated, function(req, res, next){
-        dataincontroller.scraps_create(req, res);
-    });
+    router.post('/Scrap', function(req, res, next){
+        var command = req.query.command;
+        if(!command) command = req.body.command;
 
-    router.post('/scrap-view', isAuthenticated, function(req, res, next){
-        dataoutcontroller.scrap_read(req, res);
-    });
+        console.log('======= java server ======');
+        console.log(req.body);
+        console.log('======= command =========');
+        console.log(command);
 
-    router.post('/scrap-update', isAuthenticated, function(req, res, next){
-        dataoutcontroller.scrap_update(req, res);
-    });
-
-    router.post('/scraps', function(req, res, next){
-        cont.scraps(req, res);
-    });
-
-
-    router.post('/word-cloud', function(req, res, next){
-        dataoutcontroller.word_cloud(req, res);
-    });
-
-    router.post('/comment-view', function(req, res, next){
-        dataoutcontroller.comment_view(req, res);
-    });
-
-    router.post('/comment-input', function(req, res, next){
-        dataincontroller.comment_input(req, res);
-    });
-
-    router.get('/comment-rm', function(req, res, next){
-       cont.comment_rm(req, res);
-    });
-
-    router.post('/image', function(req, res, next){
-        dataincontroller.image(req,res);
-    });
-
-    router.post('/screenshot-view', function(req, res, next){
-        dataoutcontroller.screenshot_view(req,res);
-    });
-
-    router.get('/user-update', function(req,res, next){
-        usercontroller.UserUpdate(req,res);
-    });
-
-    router.get('/scrap-remove', function(req, res, next){
-        scrapcontroller.ScrapDelete(req, res);
+        if(command == 'create'){
+            console.log('create 접속.');
+            scrapcontroller.ScrapCreate(req, res);
+        }else if(command == 'read'){
+            scrapcontroller.ScrapRead(req, res);
+        }else if(command == 'update'){
+            scrapcontroller.ScrapUpdate(req, res);
+        }else if(command == 'delete'){
+            scrapcontroller.ScrapDelete(req, res);
+        }else if(command == 'screenshot-create'){
+            console.log('screenshot-create 접속.');
+            scrapcontroller.ScreenShotCreate(req, res);
+        }else if(command == 'screenshot-read'){
+            scrapcontroller.ScreenShotRead(req, res);
+        }
     });
     return router;
 }

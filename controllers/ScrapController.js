@@ -8,20 +8,13 @@ var Comment = require('../models/comment.js');
 var fs = require('fs');
 require('date-utils');
 
-// 배열의 중간 요소를 삭제하는 코드
-Array.prototype.removeElement = function(index)
-{
-    this.splice(index,1);
-    return this;
-};
-
 // 스크린샷은 Update가 없다.
 exports.ScreenShotCreate = function(req, res){
     var contact = req.body;
     var dt = new Date().toFormat('YYYY-MM-DD-HH24:MI:SS');
     var path_scrap = contact.path_scrap;
 
-    var username = contact.username;
+    //var username = contact.username;
 
     var path_image = path_scrap+'.html';
     path_image = path_image.replace(/\/scrap-/gi, "/image/");
@@ -136,25 +129,23 @@ var ScreenShotDelete = function(path_image){
 }
 
 exports.ScrapCreate = function(req, res){
+    console.log('스크랩 크리에이트 함수 실행됨.');
     var contact = req.body;
-
-    var user = contact.username;
-    var url = contact.url;
-    var keyword1 = contact.keyword1;
-    var keyword2 = contact.keyword2;
-    var keyword3 = contact.keyword3;
-
-    var scrap_data = contact.scrap_data;
     var dt = new Date().toFormat('YYYY-MM-DD-HH24:MI:SS');
 
     var path_scrap = contact.path_scrap;
 
-    console.log('========== pre_path scrap ================');
+    console.log('=========== path_scrap =============');
     console.log(path_scrap);
 
     if(path_scrap == "null"){
-        path_scrap = './Userdir/'+user+'/scrap-'+keyword1+keyword2+keyword3+'-'+dt;
+        var user = contact.username;
+        var url = contact.url;
+        var keyword1 = contact.keyword1;
+        var keyword2 = contact.keyword2;
+        var keyword3 = contact.keyword3;
 
+        path_scrap = './Userdir/'+user+'/scrap-'+keyword1+keyword2+keyword3+'-'+dt;
         // 키워드 식별자
         var path_keyword1 = './Userdir/'+user+'/scrap-path:'+path_scrap+"-"+keyword1;
         var path_keyword2 = './Userdir/'+user+'/scrap-path:'+path_scrap+"-"+keyword2;
@@ -176,6 +167,7 @@ exports.ScrapCreate = function(req, res){
             parents_path : path_scrap}};
         var keyword_update3 = {$set : {keyword_name : keyword3, keyword_date : dt, path : path_keyword3,
             parents_path : path_scrap}};
+
 
         // 스크랩한 내용을 Scrap모델에 넣는다.
         Scrap.update(scrap_query, scrap_update, option, function(){
@@ -233,6 +225,7 @@ exports.ScrapCreate = function(req, res){
         return;
     }
 
+    var scrap_data = contact.scrap_data;
     // 파일 저장
     console.log('============ scrap data ==============');
     console.log(scrap_data);
@@ -310,7 +303,6 @@ exports.ScrapRead = function(req, res){
 }
 
 exports.ScrapUpdate = function(req, res){
-
 
 }
 
