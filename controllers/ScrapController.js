@@ -53,11 +53,11 @@ exports.ScreenShotRead = function(req,res){
     var scrap_arr=[];
     var i;
 
-    console.log('===screenshot===');
-    console.log(contact);
+    /*console.log('===screenshot===');
+    console.log(contact);*/
     User.findOne({'username' : contact.username}, function(err, user){
-        console.log('====== user =======');
-        console.log(user);
+        /*console.log('====== user =======');
+        console.log(user);*/
         if(user){
             if(start >= 0) {
                 i = start;
@@ -76,12 +76,12 @@ exports.ScreenShotRead = function(req,res){
                     if (pass_state) {
                         pass_state = false;
                         Scrap.findOne({'_id': user.Scraps[i]}, function (err, scrap) {
-                            console.log('=================== scrap ==================');
-                            console.log(scrap);
+                            /*console.log('=================== scrap ==================');
+                            console.log(scrap);*/
                             if (scrap) {
                                 if(scrap.path_image){
-                                    console.log('=================== path_imag ==================');
-                                    console.log(scrap.path_image);
+                                    /*console.log('=================== path_imag ==================');
+                                    console.log(scrap.path_image);*/
                                     fs.readFile(scrap.path_image, 'utf8', function (err, data) {
                                         if (err) {
                                             throw err;
@@ -102,8 +102,8 @@ exports.ScreenShotRead = function(req,res){
                     }
                     setTimeout(check_scrap1, 10);
                 } else {
-                    console.log('=== scrap arr ===');
-                    ;                    console.log(scrap_arr);
+                    /*console.log('=== scrap arr ===');
+                    ;                    console.log(scrap_arr);*/
                     res.send(scrap_arr);
                 }
             }
@@ -227,8 +227,8 @@ exports.ScrapCreate = function(req, res){
 
     var scrap_data = contact.scrap_data;
     // 파일 저장
-    console.log('============ scrap data ==============');
-    console.log(scrap_data);
+    /*console.log('============ scrap data ==============');
+    console.log(scrap_data);*/
     scrap_data = scrap_data.replace(/;scb;/gi, "&");
     fs.open(path_scrap+'.html', 'a+', function(err, fd){
         if(err) throw err;
@@ -247,6 +247,7 @@ exports.ScrapRead = function(req, res){
     var end = contact.end;
     var scrap_arr=[];
     var i;
+
 
     User.findOne({'username' : contact.username}, function(err, user){
         if(user){
