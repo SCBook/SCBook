@@ -320,8 +320,8 @@ exports.ScrapDelete = function(req, res){
     var path_scrap = contact.path_scrap;
     var id_scrap;
 
-    console.log(contact);
     // 주어진 path_scrap으로 스크랩 기사를 찾아 파일을 삭제, id를 찾는다.
+
     Scrap.findOne({'path':path_scrap},function(err, scrap){
         if(!scrap) return;
 
@@ -347,7 +347,6 @@ exports.ScrapDelete = function(req, res){
             for(var i=0; i<user.Scraps.length; i++){
                 if(user.Scraps[i] == scrap._id){
                     //user.Scraps.removeElement(i); // 해당 요소 삭제
-                    console.log('_id까지는 찾았어.');
                     User.update(
                         {'username':username},
                         { $pull: {'Scraps' : scrap._id}},
@@ -357,13 +356,22 @@ exports.ScrapDelete = function(req, res){
             }
         });
         // 스크랩 도큐먼트를 삭제한다.
-        Scrap.remove({'path':path_scrap},function(err){
-            if(!err){
-                console.log('스크랩 토큐먼트 삭제 성공');
-            }else{
-                console.log('스크랩 토규먼트 삭제 실패');
-            }
+        Scrap.remove({'path':path_scrap},function(){
             res.redirect('/all-users');
         });
+    });
+    Keyword.find({'parents_path': path_scrap}, function(err,keyword){
+        if(keyword){
+            for(var i=0; i<keyword.length; i++){
+                /*console.log('======= 키워드 삭제 ========');
+                console.log(keyword[i]);*/
+                User.update(
+                    {'username':username},
+                    {$pull : { 'Keywords': keyword[i]._id}},
+                    {upsert : false}, function(){}
+                );
+            }
+        }
+        Keyword.remove({'parents_path': path_scrap},function(){})
     });
 }

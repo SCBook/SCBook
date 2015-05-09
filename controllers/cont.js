@@ -186,12 +186,16 @@ exports.scraps = function(req, res){
     var keyword_query1 = { path : path_keyword1 };
     var keyword_query2 = { path : path_keyword2 };
     var keyword_query3 = { path : path_keyword3 };
-    var keyword_update1 = {$set : {keyword_name : keyword1, keyword_date : dt, path : path_keyword1}};
-    var keyword_update2 = {$set : {keyword_name : keyword2, keyword_date : dt, path : path_keyword2}};
-    var keyword_update3 = {$set : {keyword_name : keyword3, keyword_date : dt, path : path_keyword3}};
 
-    console.log('========== pre_path scrap ================');
-    console.log(path_scrap);
+    var keyword_update1 = {$set : {keyword_name : keyword1, keyword_date : dt, path : path_keyword1,
+        parents_path : path_scrap}};
+    var keyword_update2 = {$set : {keyword_name : keyword2, keyword_date : dt, path : path_keyword2,
+        parents_path : path_scrap}};
+    var keyword_update3 = {$set : {keyword_name : keyword3, keyword_date : dt, path : path_keyword3,
+        parents_path : path_scrap}};
+
+    /*console.log('========== pre_path scrap ================');
+    console.log(path_scrap);*/
 
     // 스크랩한 내용을 Scrap모델에 넣는다.
     Scrap.update(scrap_query, scrap_update, option, function(){
@@ -241,8 +245,8 @@ exports.scraps = function(req, res){
         });
     }
     // 파일 저장
-    console.log('============ scrap data ==============');
-    console.log(scrap_data);
+    /*console.log('============ scrap data ==============');
+    console.log(scrap_data);*/
     fs.open(path_scrap+'.html', 'w', function(err, fd){
         if(err) throw err;
         var buf = new Buffer(scrap_data);
