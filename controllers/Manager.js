@@ -307,11 +307,51 @@ exports.password_check = function(req, res){
     }
 }
 
-exports.for_test = function(req, res){
-    var arr = [1, 2, 3 , 4, 5, 6, 7, 8];
+exports.test_range = function(req, res){
+    /*var Scraps = [];
 
-    for(var i=0; i<arr.length; i++){
-        console.log(arr[i]);
-    }
-    res.send(arr);
+    console.log('test-range pass');
+
+    User.findOne({username : 'ksj14'},function(err, user){
+        console.log('==== user find ====');
+        console.log(user);
+        var i = 0; var critical_section = true;
+       for(var i=0; i < user.Scraps.length;){
+           if(critical_section){
+               critical_section = false;
+               console.log(user.Scraps[i]);
+               Scrap.findOne({'_id':user.Scraps[i]}, function(err, scrap){
+                   if(err){
+                       console.log(err); i = user.Scraps.length; return;
+                   }
+                   console.log('i : ' + i);
+                   console.log('===== scrap find ====');
+                   console.log(scrap);
+                   Scrap.push(scrap.keyword1); i++; critical_section = true;
+
+               });
+           }*/
+        /*function For() {
+            if( i < user.Scraps.length) {
+                if(critical_section){
+                    critical_section = false;
+                    console.log(user.Scraps[i]);
+                    Scrap.findOne({'_id':user.Scraps[i]}, function(err, scrap){
+                        if(err){
+                            console.log(err); i = user.Scraps.length; return;
+                        }
+                        console.log('i : ' + i);
+                        console.log('===== scrap find ====');
+                        console.log(scrap);
+                        Scraps.push(scrap.keyword1); i++; critical_section = true;
+
+                    });
+                }
+                setTimeout(For,5);
+            }else {
+                res.send(Scraps);
+            }
+        }
+        For();
+    });*/
 }

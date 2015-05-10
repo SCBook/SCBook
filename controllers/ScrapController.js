@@ -53,63 +53,125 @@ exports.ScreenShotRead = function(req,res){
     var scrap_arr=[];
     var i;
 
-    /*console.log('===screenshot===');
-    console.log(contact);*/
-    User.findOne({'username' : contact.username}, function(err, user){
-        /*console.log('====== user =======');
-        console.log(user);*/
-        if(user){
-            if(start >= 0) {
-                i = start;
-                if(end >= user.Scraps.length) {
-                    end = user.Scraps.length - 1;
-                }
-            }else {
-                i = user.Scraps.length - end;
-                if(i < 0 ) i = 0;
-                end = user.Scraps.length;
-            }
-            var pass_state = true;
+    if(contact.username == 'all'){
+        Scrap.find({}, function(err, scrap){
+           if(scrap){
+               if(start >= 0) {
+                   i = start;
+                   if(end >= scrap.length) {
+                       end = scrap.length - 1;
+                   }
+               }else {
+                   i = scrap.length - end;
+                   if(i < 0 ) i = 0;
+                   end = scrap.length;
+               }
+               var critical_section = true;
+               function For(){
+                   if (i < end) {
+                       if (critical_section) {
+                           critical_section = false;
+                           Scrap.findOne({'_id': scrap[i]}, function (err, find_scrap) {
+                               /*console.log('=================== scrap ==================');
+                                console.log(scrap);*/
+                               if (find_scrap) {
+                                   if(find_scrap.path_image){
+                                       /*console.log('=================== path_imag ==================');
+                                        console.log(scrap.path_image);*/
+                                       fs.readFile(find_scrap.path_image, 'utf8', function (err, data) {
+                                           if (err) {
+                                               throw err;
+                                           } else {
+                                               scrap_arr.push({
+                                                   scrap_data: " <img src = \" "+data+"\">", keyword1: find_scrap.keyword1, keyword2: find_scrap.keyword2,
+                                                   keyword3: find_scrap.keyword3, path: find_scrap.path, username: contact.username, index: i
+                                               });
+                                               i++; critical_section = true;
+                                           }
+                                       });
+                                   }
+                                   else{
+                                       i++; critical_section = true;
+                                   }
+                               }
+                           });
+                       }
+                       setTimeout(For, 10);
+                   } else {
+                       /*console.log('=== scrap arr ===');
+                        ;                    console.log(scrap_arr);*/
+                       res.send(scrap_arr);
+                   }
+               }
+               For();
+           }
+        });
+    }
+    else if(contact.username == 'friend'){
 
-            function check_scrap1() {
-                if (i < end) {
-                    if (pass_state) {
-                        pass_state = false;
-                        Scrap.findOne({'_id': user.Scraps[i]}, function (err, scrap) {
-                            /*console.log('=================== scrap ==================');
-                            console.log(scrap);*/
-                            if (scrap) {
-                                if(scrap.path_image){
-                                    /*console.log('=================== path_imag ==================');
-                                    console.log(scrap.path_image);*/
-                                    fs.readFile(scrap.path_image, 'utf8', function (err, data) {
-                                        if (err) {
-                                            throw err;
-                                        } else {
-                                            scrap_arr.push({
-                                                scrap_data: " <img src = \" "+data+"\">", keyword1: scrap.keyword1, keyword2: scrap.keyword2,
-                                                keyword3: scrap.keyword3, path: scrap.path, username: contact.username, index: i
-                                            });
-                                            i++; pass_state = true;
-                                        }
-                                    });
-                                }
-                                else{
-                                    i++; pass_state = true;
-                                }
-                            }
-                        });
+        Scrap.find({}, function(err, scrap){
+
+        });
+    }
+    else{
+        /*console.log('===screenshot===');
+         console.log(contact);*/
+        User.findOne({'username' : contact.username}, function(err, user){
+            /*console.log('====== user =======');
+             console.log(user);*/
+            if(user){
+                if(start >= 0) {
+                    i = start;
+                    if(end >= user.Scraps.length) {
+                        end = user.Scraps.length - 1;
                     }
-                    setTimeout(check_scrap1, 10);
-                } else {
-                    /*console.log('=== scrap arr ===');
-                    ;                    console.log(scrap_arr);*/
-                    res.send(scrap_arr);
+                }else {
+                    i = user.Scraps.length - end;
+                    if(i < 0 ) i = 0;
+                    end = user.Scraps.length;
                 }
+                var pass_state = true;
+
+                function check_scrap1() {
+                    if (i < end) {
+                        if (pass_state) {
+                            pass_state = false;
+                            Scrap.findOne({'_id': user.Scraps[i]}, function (err, scrap) {
+                                /*console.log('=================== scrap ==================');
+                                 console.log(scrap);*/
+                                if (scrap) {
+                                    if(scrap.path_image){
+                                        /*console.log('=================== path_imag ==================');
+                                         console.log(scrap.path_image);*/
+                                        fs.readFile(scrap.path_image, 'utf8', function (err, data) {
+                                            if (err) {
+                                                throw err;
+                                            } else {
+                                                scrap_arr.push({
+                                                    scrap_data: " <img src = \" "+data+"\">", keyword1: scrap.keyword1, keyword2: scrap.keyword2,
+                                                    keyword3: scrap.keyword3, path: scrap.path, username: contact.username, index: i
+                                                });
+                                                i++; pass_state = true;
+                                            }
+                                        });
+                                    }
+                                    else{
+                                        i++; pass_state = true;
+                                    }
+                                }
+                            });
+                        }
+                        setTimeout(check_scrap1, 10);
+                    } else {
+                        /*console.log('=== scrap arr ===');
+                         ;                    console.log(scrap_arr);*/
+                        res.send(scrap_arr);
+                    }
+                }
+                check_scrap1();
             }
-            check_scrap1();
-        }
-    });
+        });
+    }
 }
 
 // 스크린샷은 Scrap이 삭제될 때만 삭제되므로 외부에 노출될 필요는 없다.
@@ -266,9 +328,11 @@ exports.ScrapRead = function(req, res){
 
                     }
                 }
-                check_scrap2();
+                //check_scrap2();
             }
         });
+    }else if(contact.username == 'friend'){
+
     }else{
         User.findOne({'username' : contact.username}, function(err, user){
             if(user){

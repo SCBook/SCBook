@@ -7,9 +7,6 @@ var scrapcontroller = require('../controllers/ScrapController');
 var keywordcontroller = require('../controllers/KeywordController');
 var commantcontroller = require('../controllers/CommentController');
 
-var http = require('http');
-http.post = require('http-post');
-
 var fs = require('fs');
 
 var isAuthenticated = function (req, res, next) {
@@ -165,5 +162,8 @@ module.exports = function(passport){
         }
     });
 
+    router.get('/test-range', function(req, res, next){
+        manager.test_range(req,res);
+    });
     return router;
 }

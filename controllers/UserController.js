@@ -63,6 +63,11 @@ exports.UserUpdate = function(req, res){
                         User.update({'username':origin_username}, {$push:{'friends':req.query.friend}},
                             {upsert:true}, function(){});
                     }
+                    // 친구추가 해
+                    if(friend_jud == true && sub_command == 'remove'){
+                        User.update({'username':origin_username}, {$pull:{'friends':req.query.friend}},
+                            {upsert:false}, function(){});
+                    }
                 }
             }
             For();
