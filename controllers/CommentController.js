@@ -11,27 +11,34 @@ exports.CommentCreate = function(req, res){
     var contact = req.query;
     var comment_user = contact.username;
     var comment_data = contact.data;
-    var comment_path = contact.path;
+    var scrap_path = contact.path;
     var dt = new Date().toFormat('YYYY-MM-DD-HH24:MI:SS');
 
     var comment_query = {'contents' : comment_data};
-    var comment_update = {$set:{post_name : comment_user, contents : comment_data, comment_date : dt, scrap_name : comment_path}};
     var option = {upsert : true};
 
-    Comment.update(comment_query, comment_update, option, function(){});
-    Comment.find({'scrap_name':comment_path}, function(err, comment){
-        if(comment){
-            //console.log('find comments...'+ comment);
-            //console.log('comment.length : ' + comment.length);
+    Scrap.findOne({'path': scrap_path}, function(err, scrap){
+        var index = scrap.comments.length-1;
+        var comment_update = {$set:{post_name : comment_user, contents : comment_data, comment_date : dt,
+            scrap_path : scrap_path, index : index}};
 
-            for(var i=0; i < comment.length; i++){
-                if(comment[i].post_name == contact.username && comment[i].contents == comment_data && comment[i].scrap_name ==comment_path){
-                    //console.log('Comment : ' + comment[i]);
-                    Scrap.update({'path':comment_path},{$push : {comments : comment[i]._id}},option,function(){});
+        Comment.update(comment_query, comment_update, option, function(){
+            Comment.find({'scrap_path':req.query.path}, function(err, comment){
+                if(comment){
+                    console.log('find comments...'+ comment);
+                    console.log('comment.length : ' + comment.length);
+
+                    for(var i=0; i < comment.length; i++){
+                        if(comment[i].index == index){
+                            console.log('Comment : ' + comment[i]);
+                            Scrap.update({'path':req.query.path},{$push : {comments : comment[i]._id}},option,function(){});
+                        }
+                    }
                 }
-            }
-        }
+            });
+        });
     });
+
     res.send('requestHandled!');
 }
 
