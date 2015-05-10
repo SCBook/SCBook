@@ -7,6 +7,7 @@ var scrapcontroller = require('../controllers/ScrapController');
 var keywordcontroller = require('../controllers/KeywordController');
 var commantcontroller = require('../controllers/CommentController');
 
+var multer = require('multer');
 var fs = require('fs');
 
 var isAuthenticated = function (req, res, next) {
@@ -81,7 +82,7 @@ module.exports = function(passport){
     }));
 
     router.get('/signup-success', function(req, res, next){
-       return res.send('join-success');
+       return res.send({"response":"signup-success","user":req.user});
     });
 
     router.get('/signup-fail', function(req, res, next){
@@ -103,7 +104,7 @@ module.exports = function(passport){
         }
     });
 
-    router.post('/User', function(req, res, next){
+    router.post('/User', multer({changeDest: function(dest, req, res){}}, {rename: function(fieldname, filename){}}), function(req, res, next){
         var command = req.query.command;
 
         if(command == 'update'){
