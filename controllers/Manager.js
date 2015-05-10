@@ -111,6 +111,8 @@ exports.removeAll = function(req, res){
     Keyword.find({}, function(err, keyword){
         if(err) throw err;
         if(keyword){
+            console.log(keyword);
+            console.log('===========');
             for(var i=0; i<keyword.length; i++){
                 keyword[i].remove();
             }

@@ -754,3 +754,102 @@ SCRAP.INTRO.AlertView = function(x, y, z, mirror) {
 
     return group;
 }
+
+SCRAP.INTRO.detailInputObject = function() {
+
+    var root = new SCRAP.Element('div',
+        {
+            'style' : {
+                'opacity' : 0
+            }
+        }
+        ,
+        null
+    );
+
+    var element = new SCRAP.Element('div',
+        {
+            'className' : 'profile_picture_input',
+            'style' : {
+                'backgroundColor':'rgba(0,0,0,0.9)'
+            }
+        }
+        , root
+    );
+
+    var str = "<form method='POST' enctype='multipart/form-data' action='/image-receive?username='><div class='upload'><input type='file' name='upload'/></div></form>";
+    var msg = new SCRAP.Element('div',
+        {
+            'className' : 'symbol',
+            'innerHTML' : "클릭하면 프로필 사진을 등록 할 수 있습니다."
+        }
+        , element
+    );
+
+    root.innerHTML += str;
+
+    var comment = new SCRAP.Element('div',
+        {
+            'className' : 'input'
+        }
+        , root
+    );
+
+    var commentText = new SCRAP.Element('input',
+        {
+            'className' : 'text',
+            'type' : 'text',
+            'placeholder' : '하고싶은 말',
+            'maxLength' : '15',
+            'disabled'   : false
+        }
+        , comment
+    );
+
+    msg.addEventListener("click",function() {
+
+    });
+
+    var object = new THREE.CSS3DObject(root);
+
+    return object;
+
+}
+
+SCRAP.INTRO.detailInputView = function(x, y, z) {
+
+    var group = new THREE.Group();
+    group._myPos = new THREE.Vector3(x, y, z);
+
+    group._init = function() {
+
+        group.add(new SCRAP.INTRO.detailInputObject());
+
+    }
+
+    group._start = function() {
+        group.position.z = group._myPos.z;
+        for( var i=0; i<group.children.length; i++) {
+            SCRAP.Fader.fadeIn(group.children[i], 300);
+        }
+
+    }
+
+    group._exit = function() {
+
+        for( var i=0; i<group.children.length; i++) {
+            SCRAP.Fader.fadeOut(group.children[i], 300);
+        }
+        setTimeout(function() {
+            group.position.z = SCRAP._INF;
+        }, 300);
+
+    }
+
+    group.position.set(x, y, z);
+
+    group._init();
+
+    return group;
+
+}

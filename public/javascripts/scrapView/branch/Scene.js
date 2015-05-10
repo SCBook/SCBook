@@ -14,7 +14,13 @@ SCRAP.BRANCH.Scene = function() {
     SceneManager._camPosStack = [];
     SceneManager._camTgtPosStack = [];
 
+    SceneManager._sceneOwner = null;
+
+    SceneManager._curState = false;
+
     SceneManager._init = function() {
+
+        SCRAP.DIRECTOR._setMsg("로그아웃을 하려면 'q'키를 누르세요");
 
         SceneManager._setCamera();
         SceneManager._initScene();
@@ -51,9 +57,9 @@ SCRAP.BRANCH.Scene = function() {
             SceneManager._render();
         }
 
-        requestScrapImagePreviewAll(SCRAP.DIRECTOR._curuser, -1, SCRAP._INF, true);
-        requestScrapImagePreviewFriend(SCRAP.DIRECTOR._curuser, -1, SCRAP._INF, true);
-        requestScrapImagePreview(SCRAP.DIRECTOR._curuser, -1, SCRAP._INF, true);
+        requestScrapImagePreviewAll("all", -1, SCRAP._INF, true);
+        requestScrapImagePreviewFriend(SceneManager._sceneOwner, -1, SCRAP._INF, true);
+        requestScrapImagePreview(SceneManager._sceneOwner, -1, SCRAP._INF, true);
     }
 
     SceneManager._initScene = function() {
@@ -97,6 +103,22 @@ SCRAP.BRANCH.Scene = function() {
             var username = curView.children[curView._selec]._user;
             SceneManager.CSSScene.children[8]._start(username);
         });
+
+        window.addEventListener("keypress", function hitEnterKey(e) {
+            console.log(e.keyCode);
+            if (e.keyCode == 113) {
+                var curScene = SCRAP.DIRECTOR._sceneList["branch"]
+                console.log(curScene._curState);
+                if(curScene._curState) {
+                    curScene._curState._toSimpleMode();
+                } else {
+                    setTimeout(requestSignOut, 500);
+                }
+            } else {
+                e.keyCode == 0;
+                return;
+            }
+        });
     }
 
     SceneManager.moveObject = function( event ) {
@@ -138,7 +160,9 @@ SCRAP.BRANCH.Scene = function() {
         return d.getTime();
     }
 
-    SceneManager._start = function( chain ) {
+    SceneManager._start = function( owner ) {
+
+        SceneManager._sceneOwner = owner
 
         SceneManager._init();
         SceneManager._animate();
@@ -148,7 +172,7 @@ SCRAP.BRANCH.Scene = function() {
     SceneManager._exit = function( chain ) {
 
         for(var i=1; i<SceneManager.CSSScene.children.length; i++) {
-            console.log(i);
+            if(i==8) continue;
             SceneManager.CSSScene.children[i]._exit();
         }
 

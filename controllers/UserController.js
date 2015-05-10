@@ -94,7 +94,7 @@ exports.UserRead = function(req, res){
 
         var i=0; var pass=true; var friend_jud = false;
         function For(){
-            if(i<user.friend.length){
+            if(user.friend!=null && i<user.friend.length){
                 if( pass = true ){
                     pass = false;
                     if(user.friend[i] == friend){

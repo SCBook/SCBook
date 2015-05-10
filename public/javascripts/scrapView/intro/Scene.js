@@ -26,10 +26,13 @@
         }
 
         SceneManager._preProc = function() {
+
             sessionCheck();
         }
 
         SceneManager._init = function() {
+
+            SCRAP.DIRECTOR._setMsg("회원가입은 무료입니다.");
 
             if(SCRAP.DIRECTOR.curuser == null) {
                 SceneManager._preProc();
@@ -90,7 +93,7 @@
             SceneManager.CSSScene.add(new SCRAP.INTRO.loginView(0, 0, 0, true));
             SceneManager.CSSScene.add(new SCRAP.INTRO.IntroControlView(0, 0, 30, true));
             SceneManager.CSSScene.add(new SCRAP.INTRO.LoadingView(0, 0, 10, true));
-            SceneManager.CSSScene.add(new SCRAP.INTRO.GuideView(20 + 150 * Math.cos(Math.PI / 8), 0, 0, true));
+            SceneManager.CSSScene.add(new SCRAP.INTRO.detailInputView(210, 300, 0, true));
             SceneManager.CSSScene.add(new SCRAP.INTRO.AlertView(0, 0, 20, true));
             SceneManager.CSSScene.add(new SCRAP.INTRO.IntroJoinView(0, 0, 30, true));
 
@@ -219,8 +222,9 @@
                 var child = SceneManager.CSSScene.children[i];
                 child._exit();
             }
-
-            chain();
+            console.log(arguments);
+            if(arguments[1]!=null) chain(arguments[1]);
+            else chain();
 
         }
 

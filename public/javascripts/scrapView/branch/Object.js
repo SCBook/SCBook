@@ -221,6 +221,23 @@ SCRAP.BRANCH.FlipView = function(x, y, z, size, data, idx) {
         }
     }
 
+    group._restart = function() {
+        for(var i=0; i<group.children.length; i++) {
+            var temp = group.children[i];
+            if(i%2==0){
+                new TWEEN.Tween(temp.position)
+                    .to({x:0},200)
+                    .start();
+                SCRAP.Fader.fadeIn(temp,200);
+            } else {
+                new TWEEN.Tween(temp.position)
+                    .to({x:0},200)
+                    .start();
+                SCRAP.Fader.fadeIn(temp,200);
+            }
+        }
+    }
+
     group.position.set(x, y, z);
 
     group._init();
@@ -237,6 +254,8 @@ SCRAP.BRANCH.FlipViewList = function(x, y, z , rot) {
     group._isActon = false;
 
     group._front = 0;
+
+    group._myPos = new THREE.Vector3(x, y, z);
 
     group._init = function(size, data, idx) {
 
@@ -325,6 +344,8 @@ SCRAP.BRANCH.FlipViewList = function(x, y, z , rot) {
 
     group._toDetailMode = function() {
 
+        SCRAP.DIRECTOR._setMsg("뒤로가려면 'q'키를 누르세요");
+
         var curScene = SCRAP.DIRECTOR._sceneList["branch"];
 
         curScene.CSSScene.children[4]._exit();
@@ -345,7 +366,10 @@ SCRAP.BRANCH.FlipViewList = function(x, y, z , rot) {
             .to({x:-500},1000)
             .easing(TWEEN.Easing.Exponential.InOut)
             .onComplete(function() {
+                console.log("===============");
                 curScene.CSSScene.children[5]._makeList(0);
+                curScene._curState = group;
+                console.log("===============");
             })
             .start();
 
@@ -356,7 +380,39 @@ SCRAP.BRANCH.FlipViewList = function(x, y, z , rot) {
     }
 
     group._toSimpleMode = function() {
+        var curScene = SCRAP.DIRECTOR._sceneList["branch"];
+        if(curScene._camPosStack.length > 0){
+            curScene._moveCameraBack();
+            return;
+        }
+        SCRAP.DIRECTOR._setMsg("로그아웃을 하려면 'q'키를 누르세요");
+        for( var i=5; i<6; i++){
+            curScene.CSSScene.children[i]._exit();
+        }
 
+        new TWEEN.Tween(group.position)
+            .to({x:group._myPos.x},1000)
+            .easing(TWEEN.Easing.Exponential.InOut)
+            .onComplete(function() {
+                for(var i=1; i<4; i++) {
+                    var child = curScene.CSSScene.children[i];
+                    if(child != group) {
+                        child._restart();
+                    }
+                }
+                curScene.CSSScene.children[4]._start();
+                for(var i=9; i<11; i++) {
+                    var child = curScene.CSSScene.children[i];
+                    child._start();
+                }
+                curScene._curSate = false;
+            })
+            .start();
+
+        new TWEEN.Tween(group.rotation)
+            .to({y:0},1000)
+            .easing(TWEEN.Easing.Exponential.InOut)
+            .start();
     }
 
     group._exit = function() {
@@ -368,6 +424,14 @@ SCRAP.BRANCH.FlipViewList = function(x, y, z , rot) {
         setTimeout(function() {
             group.position.z = -SCRAP._INF;
         }, 300);
+    }
+
+    group._restart = function() {
+        group.position.z = group._myPos.z;
+        for(var i=0; i<group.children.length; i++) {
+            var child = group.children[i];
+            child._restart();
+        }
     }
 
     group.position.set(x, y, z);
@@ -637,7 +701,7 @@ SCRAP.BRANCH.circleView = function (x, y, z, mirror) {
     group._makeList = function( idx ) {
         var start = idx - 7;
         var end = idx + 7;
-        requestScrapImage(SCRAP.DIRECTOR._curuser, start, end, "old");
+        requestScrapImage(SCRAP.DIRECTOR._sceneList["branch"]._sceneOwner, start, end, "old");
     }
 
     group._start = function() {
@@ -683,7 +747,7 @@ SCRAP.BRANCH.circleView = function (x, y, z, mirror) {
         }
         var start = end - cnt;
         if(start < 0) start = 0;
-        requestScrapImage(SCRAP.DIRECTOR._curuser, start, end, "old");
+        requestScrapImage(SCRAP.DIRECTOR._sceneList["branch"]._sceneOwner, start, end, "old");
         //requestScrap(SCRAP.DIRECTOR._curuser, start, end, "old");
     }
 
@@ -769,7 +833,7 @@ SCRAP.BRANCH.circleView = function (x, y, z, mirror) {
         var start = firstIdx+1;
         var end = start + cnt;
         //requestScrap(SCRAP.DIRECTOR._curuser, start, end, "new");
-        requestScrapImage(SCRAP.DIRECTOR._curuser, start, end, "new");
+        requestScrapImage(SCRAP.DIRECTOR._sceneList["branch"]._sceneOwner, start, end, "new");
     }
 
     group._addBack = function( cnt ) {
@@ -969,6 +1033,10 @@ SCRAP.BRANCH.circleView = function (x, y, z, mirror) {
                 SCRAP.Fader.fadeOut(temp,200);
             }
         }
+
+        setTimeout(function() {
+            group.children = [];
+        }, 300);
     }
 
     group.rotation.y = -Math.PI/8;
@@ -1402,7 +1470,7 @@ SCRAP.BRANCH.commentInputObject = function(x, y, z) {
                 var curIdx = curView._selec;
                 var path = curView.children[curIdx]._path;
 
-                sendComment(path,input,SCRAP.DIRECTOR._curuser);
+                sendComment(path,input,SCRAP.DIRECTOR._sceneList["branch"]._sceneOwner);
 
                 object._reset();
 
@@ -1518,9 +1586,11 @@ SCRAP.BRANCH.progressBarView = function( ) {
     var group = new THREE.Group();
 
     group._init = function() {
+
     }
 
     group._start = function( words, weights ) {
+        group.children = [];
         for(var i=0; i<words.length; i++) {
             var progObj = new SCRAP.BRANCH.progressBarObject(words[i]+"("+weights[i]*100+"%)",weights[i]);
             progObj.position.set(0, (words.length - i) * (progObj._height + 20), 0);
@@ -1839,8 +1909,8 @@ SCRAP.BRANCH.freindView = function() {
     }
 
     group._mouseClick = function() {
-        if(!group._curFlag) requestFriend(group.parent.children[0]._username, SCRAP.DIRECTOR._curuser, group._rotate);
-        else requestUnfriend(group.parent.children[0]._username, SCRAP.DIRECTOR._curuser, group._rotate);
+        if(!group._curFlag) requestFriend(group.parent.children[0]._username, SCRAP.DIRECTOR._sceneList["branch"]._sceneOwner, group._rotate);
+        else requestUnfriend(group.parent.children[0]._username, SCRAP.DIRECTOR._sceneList["branch"]._sceneOwner, group._rotate);
     }
 
     group._init();
@@ -1871,12 +1941,14 @@ SCRAP.BRANCH.userView = function(x, y, z) {
     }
 
     group._start = function( username ) {
-        requestUser( username, SCRAP.DIRECTOR._curuser );
+        requestUser( username, SCRAP.DIRECTOR._sceneList["branch"]._sceneOwner );
     }
 
     group._afterStart = function(userData, words, weights, flag) {
         group.position.z = group._myPos.z;
 
+        console.log(words);
+        console.log(weights);
         group.children[0]._start(userData);
         group.children[1]._start(flag);
         group.children[2]._start(words, weights);
@@ -2017,7 +2089,7 @@ SCRAP.BRANCH.welcomeObject = function( ) {
     var element = new SCRAP.Element('div',
         {
             'className' : 'welcome_div',
-            'innerHTML' : "반갑습니다 " + SCRAP.DIRECTOR._curuser
+            'innerHTML' : "반갑습니다 " + SCRAP.DIRECTOR._curuser + "<br>" + SCRAP.DIRECTOR._sceneList["branch"]._sceneOwner + "님의 서재입니다."
         },
         root
     );

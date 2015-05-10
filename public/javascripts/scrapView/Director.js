@@ -54,12 +54,18 @@ SCRAP._initDirector = function()
 
         if(startScene == null) return;
         else if(exitScene == null) {
-            startScene._start();
+            console.log(arguments);
+            if(arguments[1]!=null) {
+                startScene._start(arguments[1]);
+            } else {
+                startScene._start();
+            }
         }
         else {
             console.log("startScene");
             console.log(startScene);
-            exitScene._exit( startScene._start );
+            if(arguments[1]!=null) exitScene._exit( startScene._start, arguments[1] );
+            else exitScene._exit( startScene._start );
         }
 
         director._curScene = startScene;
@@ -72,6 +78,14 @@ SCRAP._initDirector = function()
         for(var i=0; i<sceneList.length; i++) {
             SCRAP.DIRECTOR._sceneList[sceneList[i]]._freeze();
         }
+    }
+
+    director._setMsg = function( text ) {
+
+        var msg = document.getElementById("message");
+        if(msg==null) return;
+        msg.innerHTML = text;
+
     }
 
     return director;
@@ -89,7 +103,6 @@ SCRAP._initScene = function() {
     SCRAP.DIRECTOR._init();
 
 }
-
 
 
 SCRAP._initScene();

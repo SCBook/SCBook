@@ -100,7 +100,7 @@ function sessionCallback(res) {
     console.log(_res.user);
     if(_res.response=="session-ok") {
         SCRAP.DIRECTOR._curuser = _res.data.username;
-        SCRAP.DIRECTOR._sceneTransition("branch");
+        SCRAP.DIRECTOR._sceneTransition("branch", SCRAP.DIRECTOR._curuser);
     }
 }
 
@@ -166,7 +166,7 @@ function loginCallback( res ) {
         l_group._exit();
         b_group._exit();
         SCRAP.DIRECTOR._curuser = jsonObj.user.username;
-        SCRAP.DIRECTOR._sceneTransition("branch");
+        SCRAP.DIRECTOR._sceneTransition("branch", SCRAP.DIRECTOR._curuser);
         return;
     }
     var alert = curScene.CSSScene.children[5];

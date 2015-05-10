@@ -54,6 +54,7 @@ exports.ScreenShotRead = function(req,res){
     var i;
 
     if(contact.username == 'all'){
+        console.log('==== 1 =====');
         Scrap.find({}, function(err, scrap){
            if(scrap){
                if(start >= 0) {
@@ -66,18 +67,20 @@ exports.ScreenShotRead = function(req,res){
                    if(i < 0 ) i = 0;
                    end = scrap.length;
                }
+               console.log('======= 2 =======');
+               console.log('i = ' + i +' end = ' + end);
                var critical_section = true;
                function For(){
                    if (i < end) {
                        if (critical_section) {
                            critical_section = false;
                            Scrap.findOne({'_id': scrap[i]}, function (err, find_scrap) {
-                               /*console.log('=================== scrap ==================');
-                                console.log(scrap);*/
+                               console.log('=================== scrap ==================');
+                                console.log(find_scrap);
                                if (find_scrap) {
                                    if(find_scrap.path_image){
-                                       /*console.log('=================== path_imag ==================');
-                                        console.log(scrap.path_image);*/
+                                       console.log('=================== path_imag ==================');
+                                        console.log(find_scrap.path_image);
                                        fs.readFile(find_scrap.path_image, 'utf8', function (err, data) {
                                            if (err) {
                                                throw err;
@@ -98,8 +101,8 @@ exports.ScreenShotRead = function(req,res){
                        }
                        setTimeout(For, 2);
                    } else {
-                       /*console.log('=== scrap arr ===');
-                        ;                    console.log(scrap_arr);*/
+                       console.log('=== scrap arr ===');
+                       console.log(scrap_arr);
                        res.send(scrap_arr);
                    }
                }
