@@ -86,7 +86,7 @@ module.exports = function(passport){
     });
 
     router.get('/signup-fail', function(req, res, next){
-        var _res = req.flash('message');
+        var _res = {"response" : req.flash('message') };
         return res.send(_res);
     });
 
@@ -104,7 +104,7 @@ module.exports = function(passport){
         }
     });
 
-    router.post('/User', multer({changeDest: function(dest, req, res){}}, {rename: function(fieldname, filename){}}), function(req, res, next){
+    router.post('/User', function(req, res, next){
         var command = req.query.command;
 
         if(command == 'update'){

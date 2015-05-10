@@ -62,7 +62,13 @@ exports.removeAll = function(req, res){
                             console.log('rm-file-name : '+ file);
                             if(file != 'image'){
                                 fs.unlink(path+file, function(err){
-                                    if(err) throw err;
+                                    if(err){
+                                        try{
+                                            throw err;
+                                        }catch(err){
+                                            console.log(err); return;
+                                        }
+                                    }
                                     console.log('Successfully deleted '+ path+file+'\n');
                                 });
                                 if(index == arr.length - 1) ;
@@ -84,7 +90,6 @@ exports.removeAll = function(req, res){
                                        throw err;
                                    } catch ( err ){
                                        console.log( err );
-                                       res.send([]);
                                        return;
                                    }
                                }

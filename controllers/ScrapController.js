@@ -87,7 +87,7 @@ exports.ScreenShotRead = function(req,res){
                                            } else {
                                                scrap_arr.push({
                                                    scrap_data: " <img src = \" "+data+"\">", keyword1: find_scrap.keyword1, keyword2: find_scrap.keyword2,
-                                                   keyword3: find_scrap.keyword3, path: find_scrap.path, username: contact.username, index: i
+                                                   keyword3: find_scrap.keyword3, path: find_scrap.path, username: find_scrap.username, index: i
                                                });
                                                i++; critical_section = true;
                                            }

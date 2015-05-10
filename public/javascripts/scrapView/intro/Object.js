@@ -777,16 +777,62 @@ SCRAP.INTRO.detailInputObject = function() {
         , root
     );
 
-    var str = "<form method='POST' enctype='multipart/form-data' action='/image-receive?username='><div class='upload'><input type='file' name='upload'/></div></form>";
-    var msg = new SCRAP.Element('div',
+    var preview = new SCRAP.Element('img',
         {
-            'className' : 'symbol',
-            'innerHTML' : "클릭하면 프로필 사진을 등록 할 수 있습니다."
+            'style' : {
+                'z-index' : '100',
+                'width' : '300px',
+                'height' : '200px',
+                'border-style' : 'none'
+            }
         }
         , element
     );
 
-    root.innerHTML += str;
+    var _form = new SCRAP.Element('form',
+        {
+            'id' : 'uploadForm',
+            'method' : 'POST',
+            'enctype' : 'multipart/form-data',
+            'action' : '',
+            'style' : {
+                'position' : 'absolute',
+                'top' : '0px',
+                'left' : '0px'
+            }
+        }
+        , element
+    );
+
+    var msg = new SCRAP.Element('div',
+        {
+            'className' : 'symbol',
+            'innerHTML' : "클릭하면 프로필 사진을 등록 할 수 있습니다.",
+            'style' : {
+                'backgroundColor':'rgba(0,0,0,0.5)'
+            }
+        }
+        , _form
+    );
+
+    var uld =  new SCRAP.Element('input',
+        {
+            'name' : 'upload',
+            'type' : 'file'
+        }
+        , _form
+    );
+
+    uld.addEventListener("change",function() {
+        var oFReader = new FileReader();
+        oFReader.readAsDataURL(uld.files[0]);
+
+        oFReader.onload = function (oFREvent) {
+            console.log( oFREvent.target.result );
+            console.log(preview);
+            preview.src = oFREvent.target.result;
+        };
+    });
 
     var comment = new SCRAP.Element('div',
         {
@@ -806,11 +852,30 @@ SCRAP.INTRO.detailInputObject = function() {
         , comment
     );
 
-    msg.addEventListener("click",function() {
-
-    });
-
     var object = new THREE.CSS3DObject(root);
+
+    object._makeAction = function( username ) {
+
+        function requestPicture( username ) {
+            var frm = $('#uploadForm');
+            var stringData = frm.serialize();
+            frm.ajaxSubmit({
+                type: 'post',
+                url: "/image-receive?username=" + username,
+                data: stringData,
+                success: function (msg) {
+                    console.log(msg);
+                }
+            });
+        }
+
+        requestPicture(username);
+
+    }
+
+    object._getText = function() {
+        return commentText.value;
+    }
 
     return object;
 
@@ -824,7 +889,7 @@ SCRAP.INTRO.detailInputView = function(x, y, z) {
     group._init = function() {
 
         group.add(new SCRAP.INTRO.detailInputObject());
-
+        group.position.z = SCRAP._INF;
     }
 
     group._start = function() {
@@ -844,6 +909,14 @@ SCRAP.INTRO.detailInputView = function(x, y, z) {
             group.position.z = SCRAP._INF;
         }, 300);
 
+    }
+
+    group._makeAction = function( username ) {
+        group.children[0]._makeAction( username );
+    }
+
+    group._getComment = function() {
+        return group.children[0]._getText();
     }
 
     group.position.set(x, y, z);

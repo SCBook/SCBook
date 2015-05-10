@@ -59,8 +59,10 @@ module.exports = function(passport){
                 findOrCreateUser = function(){
                     function Userdir_check(){
                         if(!createUserdir()){
+                            console.log('===== access2 =====');
                             setTimeout(Userdir_check, 10);
                         }else{
+                            console.log('===== access1 =====');
                             User.findOne({ 'username' : username }, function(err, user) {
                                 // In case of any error, return using the done method
                                 if (err){
@@ -80,6 +82,7 @@ module.exports = function(passport){
                                     newUser.username = username;
                                     newUser.password = password;
                                     newUser.email = req.param('email');
+                                    newUser.title = req.param('comment');
 
                                     // 유효하지 않은 계정을 입력받을 때의 처리
                                     if(!regularEx(newUser)){

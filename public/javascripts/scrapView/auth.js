@@ -22,6 +22,7 @@ function requestJoin() {
     var id = group._getId();
     var pw = group._getPw();
     var alert = curScene.CSSScene.children[5];
+    var comment = curScene.CSSScene.children[4]._getComment();
 
     if(id=="") {
 
@@ -34,10 +35,10 @@ function requestJoin() {
         return;
     }
 curScene.CSSScene
-    requestJoinAuth(id, pw);
+    requestJoinAuth(id, pw, comment);
 }
 
-function requestJoinAuth(id, pw)
+function requestJoinAuth(id, pw, comment)
 {
 
     var xmlhttp;
@@ -56,7 +57,7 @@ function requestJoinAuth(id, pw)
             joinCallback(xmlhttp.responseText);
         }
     }
-    xmlhttp.open("POST","./signup?username="+id+"&password="+pw,true);
+    xmlhttp.open("POST","./signup?username="+id+"&password="+pw+"&title="+comment,true);
     xmlhttp.send();
 }
 
@@ -65,10 +66,17 @@ function joinCallback(res)
 
     var curScene = SCRAP.DIRECTOR._sceneList["intro"];
     var alert = curScene.CSSScene.children[5];
-    alert._alert(res);
 
-    if(res=="join-success") {
-        curScene._toLoginView();
+    var jsonObj = JSON.parse(res);
+
+    console.log(res);
+
+    alert._alert(jsonObj.response);
+
+    if(jsonObj.response=="signup-success") {
+        var username = jsonObj.user.username;
+        var pushPic = curScene.CSSScene.children[4];
+        pushPic._makeAction( username );
     }
 }
 

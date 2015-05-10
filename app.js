@@ -27,7 +27,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(multer({ dest: './Userdir/',
     rename: function (fieldname, filename) {
-        return 'profile_image : ' + filename;
+        return 'profile_image-' + filename;
     },
     onFileUploadStart: function (file) {
         console.log(file.originalname + ' is starting ...')
@@ -44,9 +44,9 @@ app.use(multer({ dest: './Userdir/',
 app.get('/image-upload', function(req, res){
     res.render('upload');
 });
+//multer({changeDest: function(dest, req, res){}}, {rename: function(fieldname, filename){}})
 
-app.post('/image-receive', multer({changeDest: function(dest, req, res){}}, {rename: function(fieldname, filename){}}), function(req, res) {
-    //console.log(req.files);
+app.post('/image-receive' , multer({changeDest: function(dest, req, res){}}, {rename: function(fieldname, filename){}}), function(req, res) {
     UserController.UserUpdate(req, res);
 });
 

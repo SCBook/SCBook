@@ -400,6 +400,7 @@ SCRAP.BRANCH.FlipViewList = function(x, y, z , rot) {
                         child._restart();
                     }
                 }
+                curScene._curState = false;
                 curScene.CSSScene.children[4]._start();
                 for(var i=9; i<11; i++) {
                     var child = curScene.CSSScene.children[i];
@@ -701,7 +702,7 @@ SCRAP.BRANCH.circleView = function (x, y, z, mirror) {
     group._makeList = function( idx ) {
         var start = idx - 7;
         var end = idx + 7;
-        requestScrapImage(SCRAP.DIRECTOR._sceneList["branch"]._sceneOwner, start, end, "old");
+        requestScrapImage("all", start, end, "old");
     }
 
     group._start = function() {

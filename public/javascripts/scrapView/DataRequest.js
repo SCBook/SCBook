@@ -349,7 +349,9 @@ function requestUser( username, curUser ) {
             requestKeyword(username, userData, jsonObj.friend);
         }
     }
-    xmlhttp.open("POST","./user?command=read&username="+username+"&curUser="+curUser,true);
+    console.log(username);
+    console.log(curUser);
+    xmlhttp.open("POST","./User?command=read&username="+username+"&curUser="+curUser,true);
     xmlhttp.send();
 
     // username, scraps, comment, - userData
@@ -373,7 +375,6 @@ function requestKeyword( username, userData, flag ) {
     {
         if (xmlhttp.readyState==4 && xmlhttp.status==200)
         {
-            console.log("rcved!!!");
             var jsonObj = JSON.parse(xmlhttp.responseText);
             var words = [];
             var weights = [];
@@ -408,7 +409,6 @@ function requestScrapImagePreviewAll( username, start, end, type ) {
         if (xmlhttp.readyState==4 && xmlhttp.status==200)
         {
             var curScene = SCRAP.DIRECTOR._sceneList["branch"];
-            console.log(xmlhttp.responseText);
             var jsonObj = JSON.parse(xmlhttp.responseText);
             // scrap_arr.push({scrap_data :data, keyword1 : scrap.keyword1, keyword2 : scrap.keyword2,
             //keyword3 : scrap.keyword3, path:scrap.path, index:i}/*data*/);
@@ -429,8 +429,8 @@ function requestScrapImagePreviewAll( username, start, end, type ) {
                 rcvUser.push(jsonObj[i].username);
                 rcvIdx.push(jsonObj[i].index);
             }
-            curScene.CSSScene.children[2]._init(15, rcvData, rcvIdx);
-            curScene.CSSScene.children[9]._countCnt(1, rcvData.length);
+            curScene.CSSScene.children[2]._init(10, rcvData, rcvIdx);
+            curScene.CSSScene.children[9]._countCnt(0, jsonObj.length);
         }
         else {
             console.log("no recived");
@@ -455,7 +455,6 @@ function requestScrapImagePreviewFriend( username, start, end, type) {
         if (xmlhttp.readyState==4 && xmlhttp.status==200)
         {
             var curScene = SCRAP.DIRECTOR._sceneList["branch"];
-            console.log(xmlhttp.responseText);
             var jsonObj = JSON.parse(xmlhttp.responseText);
             // scrap_arr.push({scrap_data :data, keyword1 : scrap.keyword1, keyword2 : scrap.keyword2,
             //keyword3 : scrap.keyword3, path:scrap.path, index:i}/*data*/);
@@ -476,8 +475,8 @@ function requestScrapImagePreviewFriend( username, start, end, type) {
                 rcvUser.push(jsonObj[i].username);
                 rcvIdx.push(jsonObj[i].index);
             }
-            curScene.CSSScene.children[3]._init(15, rcvData, rcvIdx);
-            curScene.CSSScene.children[9]._countCnt(2, rcvData.length);
+            curScene.CSSScene.children[3]._init(10, rcvData, rcvIdx);
+            curScene.CSSScene.children[9]._countCnt(2, jsonObj.length);
         }
         else {
             console.log("no recived");
@@ -502,7 +501,6 @@ function requestScrapImagePreview( username, start, end, type) {
         if (xmlhttp.readyState==4 && xmlhttp.status==200)
         {
             var curScene = SCRAP.DIRECTOR._sceneList["branch"];
-            console.log(xmlhttp.responseText);
             var jsonObj = JSON.parse(xmlhttp.responseText);
             // scrap_arr.push({scrap_data :data, keyword1 : scrap.keyword1, keyword2 : scrap.keyword2,
             //keyword3 : scrap.keyword3, path:scrap.path, index:i}/*data*/);
@@ -523,8 +521,11 @@ function requestScrapImagePreview( username, start, end, type) {
                 rcvUser.push(jsonObj[i].username);
                 rcvIdx.push(jsonObj[i].index);
             }
-            curScene.CSSScene.children[1]._init(15, rcvData, rcvIdx);
-            curScene.CSSScene.children[9]._countCnt(0, rcvData.length);
+            curScene.CSSScene.children[1]._init(10, rcvData, rcvIdx);
+
+            console.log(len);
+            var len = rcvData.length;
+            curScene.CSSScene.children[9]._countCnt(1, jsonObj.length);
         }
         else {
             console.log("no recived");
