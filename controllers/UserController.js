@@ -9,6 +9,7 @@ require('date-utils');
 exports.UserUpdate = function(req, res){
     var origin_username = req.query.origin_username;
     var change_username = req.query.change_username;
+    var sub_command = req.query.sub_command;
     var username_message;
     var password_message;
     var error_message='';
@@ -44,19 +45,36 @@ exports.UserUpdate = function(req, res){
     if(req.query.nickname){
         User.update({'username':origin_username},{$set:{'nickname':req.query.nickname}},{upsert:false},function(){});
     }
+    if(req.query.friend){
+        // 친구추가 중복 방지
+        User.findOne({'username':origin_username}, function(err, user){
+            var i=0; var pass= true; var friend_jud = false;
+            function For(){
+                if(i<user.friend.length){
+                    pass = false;
+                    if(user.friend[i] == req.query.friend){
+                        friend_jud = true; i = user.friend.length;
+                    }else{
+                        i++; pass = true;
+                    }
+                    setTimeout(2);
+                }else{
+                    if(friend_jud == false){
+                        User.update({'username':origin_username}, {$push:{'friends':req.query.friend}},
+                            {upsert:true}, function(){});
+                    }
+                }
+            }
+            For();
+        });
+    }
+
     if(error_message){
         res.send(error_message);
     }else{
         res.send('success');
     }
-    if(req.query.friend){
-        /*User.findOne({'username':origin_username}, function(err, user){
-            for(var i=0; i<user.friends.length; i++){
-                if()
-            }
-        })*/
-        User.update({'username':origin_username}, {$push:{'friends':req.query.friend}}, {upsert:true}, function(){});
-    }
+
 }
 
 exports.UserRead = function(req, res){
