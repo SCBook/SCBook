@@ -141,8 +141,12 @@ module.exports = function(passport){
 
         if(command == 'create'){
             keywordcontroller.KeywordCreate(req, res);
-        }else if(command = 'read'){
+        }else if(command == 'read'){
             keywordcontroller.KeywordRead(req,res);
+        }else if(command == 'update'){
+            keywordcontroller.KeywordUpdate(req,res);
+        }else if(command == 'delete'){
+            keywordcontroller.KeywordDelete(req, res);
         }
     });
     return router;

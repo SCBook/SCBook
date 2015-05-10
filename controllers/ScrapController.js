@@ -248,59 +248,84 @@ exports.ScrapRead = function(req, res){
     var scrap_arr=[];
     var i;
 
-
-    User.findOne({'username' : contact.username}, function(err, user){
-        if(user){
-            if(start >= 0) {
+    if(contact.username == 'all'){
+        Scrap.find({},function(err, scrap){
+            if(start >= 0){
                 i = start;
-                if(end >= user.Scraps.length) {
+                if(end >= scrap.length){
+                    end = scrap.length -1;
+                }else{
+                    i = scrap.length -end;
+                    if( i<0 ) i =0;
+                    end = scrap.length -1;
+                }
+                var pass_state = true;
+
+                function check_scrap2(){
+                    if(i < end){
+
+                    }
+                }
+                check_scrap2();
+            }
+        });
+    }else{
+        User.findOne({'username' : contact.username}, function(err, user){
+            if(user){
+                if(start >= 0) {
+                    i = start;
+                    if(end >= user.Scraps.length) {
+                        end = user.Scraps.length - 1;
+                    }
+                }else {
+                    i = user.Scraps.length -end;
+                    if(i < 0 ) i = 0;
                     end = user.Scraps.length - 1;
                 }
-            }else {
-                i = user.Scraps.length -end;
-                if(i < 0 ) i = 0;
-                end = user.Scraps.length - 1;
-            }
-            var pass_state = true;
+                var pass_state = true;
 
-            function check_scrap1() {
-                if (i < end) {
-                    if (pass_state) {
-                        pass_state = false;
-                        Scrap.findOne({'_id': user.Scraps[i]}, function (err, scrap) {
-                            if (scrap) {
-                                fs.readFile(scrap.path + '.html', 'utf8', function (err, data) {
-                                    if (err) {
-                                        try {
-                                            throw err;
-                                        } catch ( err ){
-                                            console.log( err );
-                                            res.send([]);
-                                            return;
+                function check_scrap1() {
+                    if (i < end) {
+                        if (pass_state) {
+                            pass_state = false;
+                            Scrap.findOne({'_id': user.Scraps[i]}, function (err, scrap) {
+                                if (scrap) {
+                                    fs.readFile(scrap.path + '.html', 'utf8', function (err, data) {
+                                        if (err) {
+                                            try {
+                                                throw err;
+                                            } catch (err) {
+                                                console.log(err);
+                                                res.send([]);
+                                                return;
+                                            }
+                                        } else {
+                                            scrap_arr.push({
+                                                scrap_data: data,
+                                                keyword1: scrap.keyword1,
+                                                keyword2: scrap.keyword2,
+                                                keyword3: scrap.keyword3,
+                                                path: scrap.path,
+                                                username: contact.username,
+                                                index: i
+                                            });
+                                            i++;
+                                            pass_state = true;
                                         }
-                                    } else {
-                                        scrap_arr.push({
-                                            scrap_data: data, keyword1: scrap.keyword1, keyword2: scrap.keyword2,
-                                            keyword3: scrap.keyword3, path: scrap.path, username: contact.username, index: i
-                                        });
-                                        i++;
-                                        pass_state = true;
-                                    }
 
-                                });
-                            }
-                        });
+                                    });
+                                }
+                            });
+                        }
+                        setTimeout(check_scrap1, 10);
+                    } else {
+                        res.send(scrap_arr);
                     }
-                    setTimeout(check_scrap1, 10);
-                } else {
-                    res.send(scrap_arr);
                 }
+                check_scrap1();
             }
-
-            check_scrap1();
-
-        }
-    });
+        });
+    }
 }
 
 exports.ScrapUpdate = function(req, res){
