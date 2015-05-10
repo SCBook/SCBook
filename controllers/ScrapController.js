@@ -113,7 +113,58 @@ exports.ScreenShotRead = function(req,res){
     else if(contact.username == 'friend'){
 
         Scrap.find({}, function(err, scrap){
-            //for(var i=0; i<)
+            if(scrap){
+                if(start >= 0) {
+                    i = start;
+                    if(end >= scrap.length) {
+                        end = scrap.length - 1;
+                    }
+                }else {
+                    i = scrap.length - end;
+                    if(i < 0 ) i = 0;
+                    end = scrap.length;
+                }
+                /*console.log('======= 2 =======');
+                 console.log('i = ' + i +' end = ' + end);*/
+                var critical_section = true;
+                function For(){
+                    if (i < end) {
+                        if (critical_section) {
+                            critical_section = false;
+                            Scrap.findOne({'_id': scrap[i]}, function (err, find_scrap) {
+                                /*console.log('=================== scrap ==================');
+                                 console.log(find_scrap);*/
+                                if (find_scrap) {
+                                    if(find_scrap.path_image){
+                                        /*console.log('=================== path_imag ==================');
+                                         console.log(find_scrap.path_image);*/
+                                        fs.readFile(find_scrap.path_image, 'utf8', function (err, data) {
+                                            if (err) {
+                                                throw err;
+                                            } else {
+                                                scrap_arr.push({
+                                                    scrap_data: " <img src = \" "+data+"\">", keyword1: find_scrap.keyword1, keyword2: find_scrap.keyword2,
+                                                    keyword3: find_scrap.keyword3, path: find_scrap.path, username: contact.username, index: i
+                                                });
+                                                i++; critical_section = true;
+                                            }
+                                        });
+                                    }
+                                    else{
+                                        i++; critical_section = true;
+                                    }
+                                }
+                            });
+                        }
+                        setTimeout(For, 2);
+                    } else {
+                        /*console.log('=== scrap arr ===');
+                         console.log(scrap_arr);*/
+                        res.send(scrap_arr);
+                    }
+                }
+                For();
+            }
         });
     }
     else{
@@ -218,7 +269,7 @@ exports.ScrapCreate = function(req, res){
 
         var scrap_query = {'path' : path_scrap};
         var scrap_update = {$set : {'keyword1' : keyword1, 'keyword2' : keyword2, 'keyword3' : keyword3,
-            'path' : path_scrap, 'url':url, 'scrap_date' : dt}};
+            'path' : path_scrap, 'url':url, 'scrap_date' : dt, 'username' : user}};
 
         var option = {upsert : true};
 
@@ -227,11 +278,11 @@ exports.ScrapCreate = function(req, res){
         var keyword_query2 = { path : path_keyword2 };
         var keyword_query3 = { path : path_keyword3 };
         var keyword_update1 = {$set : {keyword_name : keyword1, keyword_date : dt, path : path_keyword1,
-            parents_path : path_scrap}};
+            parents_path : path_scrap, 'username' : user}};
         var keyword_update2 = {$set : {keyword_name : keyword2, keyword_date : dt, path : path_keyword2,
-            parents_path : path_scrap}};
+            parents_path : path_scrap, 'username' : user}};
         var keyword_update3 = {$set : {keyword_name : keyword3, keyword_date : dt, path : path_keyword3,
-            parents_path : path_scrap}};
+            parents_path : path_scrap, 'username' : user}};
 
 
         // 스크랩한 내용을 Scrap모델에 넣는다.
