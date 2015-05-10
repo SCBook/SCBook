@@ -4,7 +4,7 @@
 var mongoose = require('mongoose');
 
 module.exports = mongoose.model('keyword', {
-    username : { type : String },
+    _username : { type : String },
     keyword_name : { type : String },
     weight : { type : Number },
     path : { type : String },

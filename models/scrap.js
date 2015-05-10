@@ -13,5 +13,5 @@ module.exports = mongoose.model('scrap', {
     path : { type : String },
     sentence : { type : String },
     scrap_date : { type : String },
-    username : { type : String }
+    _username : { type : String }
 });
