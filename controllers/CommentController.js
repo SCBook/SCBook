@@ -1,6 +1,12 @@
 /**
  * Created by hansol on 15. 5. 9.
  */
+var User = require('../models/user.js');
+var Scrap = require('../models/scrap.js');
+var Comment = require('../models/comment.js');
+var fs = require('fs');
+require('date-utils');
+
 exports.CommentCreate = function(req, res){
     var contact = req.query;
     var comment_user = contact.username;
@@ -77,5 +83,6 @@ exports.CommentUpdate = function(req, res){
 }
 
 exports.CommentDelete = function(req, res){
+    var contact = req.query;
 
 }

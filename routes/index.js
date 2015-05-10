@@ -5,6 +5,7 @@ var manager = require('../controllers/Manager');
 var usercontroller = require('../controllers/UserController');
 var scrapcontroller = require('../controllers/ScrapController');
 var keywordcontroller = require('../controllers/KeywordController');
+var commantcontroller = require('../controllers/CommentController');
 
 var http = require('http');
 http.post = require('http-post');
@@ -150,6 +151,19 @@ module.exports = function(passport){
         }
     });
 
+    router.post('/Comment', function(req, res, next){
+       var command = req.query.command;
+
+        if(command == 'create'){
+            commantcontroller.CommentCreate(req, res);
+        }else if(command == 'read'){
+            commantcontroller.CommentRead(req, res);
+        }else if(command == 'update'){
+            commantcontroller.CommentUpdate(req, res);
+        }else if(command == 'delete'){
+            commantcontroller.CommentDelete(req, res);
+        }
+    });
 
     return router;
 }

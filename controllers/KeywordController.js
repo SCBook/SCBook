@@ -4,7 +4,6 @@
 // 기본적인 키워드 생성은 스크랩 페이지를 통해서 이루어진다.
 // KeywordController의 create는 사용자가 수동으로 키워드를 입력할 때 작동한다.
 var User = require('../models/user.js');
-var Scrap = require('../models/scrap.js');
 var Keyword = require('../models/keyword.js');
 var Comment = require('../models/comment.js');
 var fs = require('fs');

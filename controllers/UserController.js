@@ -3,7 +3,6 @@
  */
 var User = require('../models/user.js');
 var manager = require('../controllers/Manager');
-var Keyword = require('../controllers/KeywordController');
 var fs = require('fs');
 require('date-utils');
 
