@@ -3,6 +3,7 @@
  */
 var User = require('../models/user.js');
 var manager = require('../controllers/Manager');
+var Keyword = require('../controllers/KeywordController');
 var fs = require('fs');
 require('date-utils');
 
@@ -62,12 +63,31 @@ exports.UserUpdate = function(req, res){
 exports.UserRead = function(req, res){
     var contact = req.query;
     var username = contact.username;
+    var friend = contact.reader;
 
     User.findOne({'username' : username}, function(err, user){
         if(err){
             res.send('User can\'nt find.'); return;
         }
-        res.send(user);
+
+        var i=0; var pass=true; var friend_jud = false;
+        function For(){
+            if(i<user.friend.length){
+                if( pass = true ){
+                    pass = false;
+                    if(user.friend[i] == friend){
+                        friend_jud = true; i=user.friend.length; pass = true;
+                    }else{
+                        i++; pass = true;
+                    }
+                }
+                setTimeout(5);
+            }else {
+                var user_info = {username : user.username, scraps : user.Scraps.length, comment : user.title, friend : friend_jud };
+                res.send(user_info);
+            }
+        }
+        For();
     });
 }
 

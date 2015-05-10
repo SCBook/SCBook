@@ -4,6 +4,7 @@ var router = express.Router();
 var manager = require('../controllers/Manager');
 var usercontroller = require('../controllers/UserController');
 var scrapcontroller = require('../controllers/ScrapController');
+var keywordcontroller = require('../controllers/KeywordController');
 
 var http = require('http');
 http.post = require('http-post');
@@ -120,13 +121,7 @@ module.exports = function(passport){
         var command = req.query.command;
         if(!command) command = req.body.command;
 
-        console.log('======= java server ======');
-        console.log(req.body);
-        console.log('======= command =========');
-        console.log(command);
-
         if(command == 'create'){
-            console.log('create 접속.');
             scrapcontroller.ScrapCreate(req, res);
         }else if(command == 'read'){
             scrapcontroller.ScrapRead(req, res);
@@ -135,10 +130,23 @@ module.exports = function(passport){
         }else if(command == 'delete'){
             scrapcontroller.ScrapDelete(req, res);
         }else if(command == 'screenshot-create'){
-            console.log('screenshot-create 접속.');
             scrapcontroller.ScreenShotCreate(req, res);
         }else if(command == 'screenshot-read'){
             scrapcontroller.ScreenShotRead(req, res);
+        }
+    });
+
+    router.post('/Keyword', function(req,res,next){
+        var command = req.query.command;
+
+        if(command == 'create'){
+            keywordcontroller.KeywordCreate(req, res);
+        }else if(command == 'read'){
+            keywordcontroller.KeywordRead(req,res);
+        }else if(command == 'update'){
+            keywordcontroller.KeywordUpdate(req,res);
+        }else if(command == 'delete'){
+            keywordcontroller.KeywordDelete(req, res);
         }
     });
     return router;

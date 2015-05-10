@@ -50,7 +50,7 @@ exports.KeywordRead = function(req, res){
                         keyword_res.push(keyword_temp[index[i]]);
                     }
                     for(var j=0; j<independence; j++){
-                        keyword_res[j].weight = keyword_res[j].weight*50/max + 100;
+                        keyword_res[j].weight = keyword_res[j].weight/max;
                     }
                     res.send(keyword_res);
                 }
