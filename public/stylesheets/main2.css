@@ -7,6 +7,10 @@
     cursor: default;
 }
 
+.preview img {
+    width : 100%
+}
+
 .preview:hover {
     box-shadow: 0px 0px 12px rgba(0,255,255,0.75);
     border: 1px solid rgba(127,255,255,0.75);
@@ -202,4 +206,26 @@
     text-align: center;
     color: rgba(255,255,255,0.75);
     text-shadow: 0 0 10px rgba(0,255,255,0.95);
+}
+
+.scrap_cnt {
+    width: 300px;
+    height: 200px;
+    font-size: 50px;
+    font-weight: bold;
+    text-align: center;
+    color: rgba(255,255,255,0.75);
+    text-shadow: 0 0 10px rgba(0,255,255,0.95);
+    cursor: default;
+}
+
+.welcome_div {
+    width: 600px;
+    height: 200px;
+    font-size: 50px;
+    font-weight: bold;
+    text-align: center;
+    color: rgba(255,255,255,0.75);
+    text-shadow: 0 0 10px rgba(0,255,255,0.95);
+    cursor: default;
 }

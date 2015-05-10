@@ -50,6 +50,10 @@ SCRAP.BRANCH.Scene = function() {
 
             SceneManager._render();
         }
+
+        requestScrapImagePreviewAll(SCRAP.DIRECTOR._curuser, -1, SCRAP._INF, true);
+        requestScrapImagePreviewFriend(SCRAP.DIRECTOR._curuser, -1, SCRAP._INF, true);
+        requestScrapImagePreview(SCRAP.DIRECTOR._curuser, -1, SCRAP._INF, true);
     }
 
     SceneManager._initScene = function() {
@@ -67,16 +71,16 @@ SCRAP.BRANCH.Scene = function() {
     }
 
     SceneManager._initObject = function() {
-        var data = [];
-        for(var i=0; i<24; i++) data.push(i);
-        SceneManager.CSSScene.add(SCRAP.BRANCH.FlipViewList(0,0,0,0,15,data));
-        SceneManager.CSSScene.add(SCRAP.BRANCH.FlipViewList(-400, 0, 0, 0, 15, data));
-        SceneManager.CSSScene.add(SCRAP.BRANCH.FlipViewList(400, 0, 0, 0, 15, data));
-        SceneManager.CSSScene.add(SCRAP.BRANCH.IntroControlView(0, 0, 0));
+        SceneManager.CSSScene.add(new SCRAP.BRANCH.FlipViewList(0,0,0,0,15));
+        SceneManager.CSSScene.add(new SCRAP.BRANCH.FlipViewList(-400, 0, 0, 0, 15));
+        SceneManager.CSSScene.add(new SCRAP.BRANCH.FlipViewList(400, 0, 0, 0, 15));
+        SceneManager.CSSScene.add(new SCRAP.BRANCH.IntroControlView(0, 0, 0));
         SceneManager.CSSScene.add(new SCRAP.BRANCH.circleView(500, 0, -100, true));
         SceneManager.CSSScene.add(new SCRAP.BRANCH.mainControlView(80, 0, 300, true));
         SceneManager.CSSScene.add(new SCRAP.BRANCH.commentView(700,50,500));
         SceneManager.CSSScene.add(new SCRAP.BRANCH.userView(-600,-30,400));
+        SceneManager.CSSScene.add(new SCRAP.BRANCH.scrapCntListView());
+        SceneManager.CSSScene.add(new SCRAP.BRANCH.welcomeView());
     }
 
     SceneManager._initListener = function() {

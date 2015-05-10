@@ -139,7 +139,7 @@ function requestScrapImage ( username, start, end, type) {
             console.log("no recived");
         }
     }
-    xmlhttp.open("POST","./screenshot-view?username="+username+"&start="+start+"&end="+end,true);
+    xmlhttp.open("POST","./Scrap?command=screenshot-read&username="+username+"&start="+start+"&end="+end,true);
     xmlhttp.send();
 }
 
@@ -272,9 +272,7 @@ function requestUser( username, curUser ) {
             console.log("rcved!!!");
             console.log(xmlhttp.responseText);
 
-            var curScene = SCRAP.DIRECTOR._sceneList["branch"].CSSScene;
-            var child = curScene.children[8];
-            child._afterStart(userData, words, weights, flag);
+            requestKeyword(username, userData, flag);
         }
     }
     xmlhttp.open("POST","./user?command=read&username="+username+"&curUser="+curUser,true);
@@ -283,4 +281,175 @@ function requestUser( username, curUser ) {
     // username, scraps, comment, - userData
     // words, weight( 0 ~ 1 )
     // flag ( username, reader )
+}
+
+
+function requestKeyword( username, userData, flag ) {
+
+    var xmlhttp;
+    if (window.XMLHttpRequest)
+    {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp=new XMLHttpRequest();
+    }
+    else
+    {// code for IE6, IE5
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange=function()
+    {
+        if (xmlhttp.readyState==4 && xmlhttp.status==200)
+        {
+            console.log("rcved!!!");
+            console.log(xmlhttp.responseText);
+
+            var curScene = SCRAP.DIRECTOR._sceneList["branch"].CSSScene;
+            var child = curScene.children[8];
+            child._afterStart(userData, words, weights, flag);
+        }
+    }
+    xmlhttp.open("POST","./user?command=read&username="+username+"&curUser="+curUser,true);
+    xmlhttp.send();
+
+}
+
+function requestScrapImagePreviewAll( username, start, end, type ) {
+    console.log("requestScrapImage");
+    var xmlhttp;
+    if (window.XMLHttpRequest)
+    {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp=new XMLHttpRequest();
+    }
+    else
+    {// code for IE6, IE5
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange=function()
+    {
+        if (xmlhttp.readyState==4 && xmlhttp.status==200)
+        {
+            var curScene = SCRAP.DIRECTOR._sceneList["branch"];
+            console.log(xmlhttp.responseText);
+            var jsonObj = JSON.parse(xmlhttp.responseText);
+            // scrap_arr.push({scrap_data :data, keyword1 : scrap.keyword1, keyword2 : scrap.keyword2,
+            //keyword3 : scrap.keyword3, path:scrap.path, index:i}/*data*/);
+            var rcvData = [];
+            var rcvKeyword = [];
+            var rcvPath = [];
+            var rcvUser = [];
+            var rcvIdx = [];
+            for(var i=0; i<jsonObj.length; i++){
+                rcvData.push(jsonObj[i].scrap_data);
+                var keywordSet = [];
+                for(var j=1; j<=3; j++) {
+                    var name = "keyword"+j;
+                    keywordSet.push(jsonObj[i][name]);
+                }
+                rcvKeyword.push(keywordSet);
+                rcvPath.push(jsonObj[i].path);
+                rcvUser.push(jsonObj[i].username);
+                rcvIdx.push(jsonObj[i].index);
+            }
+            curScene.CSSScene.children[2]._init(15, rcvData, rcvIdx);
+            curScene.CSSScene.children[9]._countCnt(1, rcvData.length);
+        }
+        else {
+            console.log("no recived");
+        }
+    }
+    xmlhttp.open("POST","./Scrap?command=screenshot-read&username="+username+"&start="+start+"&end="+end,true);
+    xmlhttp.send();
+}
+
+function requestScrapImagePreviewFriend( username, start, end, type) {
+    var xmlhttp;
+    if (window.XMLHttpRequest)
+    {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp=new XMLHttpRequest();
+    }
+    else
+    {// code for IE6, IE5
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange=function()
+    {
+        if (xmlhttp.readyState==4 && xmlhttp.status==200)
+        {
+            var curScene = SCRAP.DIRECTOR._sceneList["branch"];
+            console.log(xmlhttp.responseText);
+            var jsonObj = JSON.parse(xmlhttp.responseText);
+            // scrap_arr.push({scrap_data :data, keyword1 : scrap.keyword1, keyword2 : scrap.keyword2,
+            //keyword3 : scrap.keyword3, path:scrap.path, index:i}/*data*/);
+            var rcvData = [];
+            var rcvKeyword = [];
+            var rcvPath = [];
+            var rcvUser = [];
+            var rcvIdx = [];
+            for(var i=0; i<jsonObj.length; i++){
+                rcvData.push(jsonObj[i].scrap_data);
+                var keywordSet = [];
+                for(var j=1; j<=3; j++) {
+                    var name = "keyword"+j;
+                    keywordSet.push(jsonObj[i][name]);
+                }
+                rcvKeyword.push(keywordSet);
+                rcvPath.push(jsonObj[i].path);
+                rcvUser.push(jsonObj[i].username);
+                rcvIdx.push(jsonObj[i].index);
+            }
+            curScene.CSSScene.children[3]._init(15, rcvData, rcvIdx);
+            curScene.CSSScene.children[9]._countCnt(2, rcvData.length);
+        }
+        else {
+            console.log("no recived");
+        }
+    }
+    xmlhttp.open("POST","./Scrap?command=screenshot-read&username="+username+"&start="+start+"&end="+end,true);
+    xmlhttp.send();
+}
+
+function requestScrapImagePreview( username, start, end, type) {
+    var xmlhttp;
+    if (window.XMLHttpRequest)
+    {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp=new XMLHttpRequest();
+    }
+    else
+    {// code for IE6, IE5
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange=function()
+    {
+        if (xmlhttp.readyState==4 && xmlhttp.status==200)
+        {
+            var curScene = SCRAP.DIRECTOR._sceneList["branch"];
+            console.log(xmlhttp.responseText);
+            var jsonObj = JSON.parse(xmlhttp.responseText);
+            // scrap_arr.push({scrap_data :data, keyword1 : scrap.keyword1, keyword2 : scrap.keyword2,
+            //keyword3 : scrap.keyword3, path:scrap.path, index:i}/*data*/);
+            var rcvData = [];
+            var rcvKeyword = [];
+            var rcvPath = [];
+            var rcvUser = [];
+            var rcvIdx = [];
+            for(var i=0; i<jsonObj.length; i++){
+                rcvData.push(jsonObj[i].scrap_data);
+                var keywordSet = [];
+                for(var j=1; j<=3; j++) {
+                    var name = "keyword"+j;
+                    keywordSet.push(jsonObj[i][name]);
+                }
+                rcvKeyword.push(keywordSet);
+                rcvPath.push(jsonObj[i].path);
+                rcvUser.push(jsonObj[i].username);
+                rcvIdx.push(jsonObj[i].index);
+            }
+            curScene.CSSScene.children[1]._init(15, rcvData, rcvIdx);
+            curScene.CSSScene.children[9]._countCnt(0, rcvData.length);
+        }
+        else {
+            console.log("no recived");
+        }
+    }
+    xmlhttp.open("POST","./Scrap?command=screenshot-read&username="+username+"&start="+start+"&end="+end,true);
+    xmlhttp.send();
 }
