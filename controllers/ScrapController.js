@@ -96,7 +96,7 @@ exports.ScreenShotRead = function(req,res){
                                }
                            });
                        }
-                       setTimeout(For, 10);
+                       setTimeout(For, 2);
                    } else {
                        /*console.log('=== scrap arr ===');
                         ;                    console.log(scrap_arr);*/
@@ -110,7 +110,7 @@ exports.ScreenShotRead = function(req,res){
     else if(contact.username == 'friend'){
 
         Scrap.find({}, function(err, scrap){
-
+            //for(var i=0; i<)
         });
     }
     else{
