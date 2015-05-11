@@ -269,7 +269,7 @@ exports.ScrapCreate = function(req, res){
 
         var scrap_query = {'path' : path_scrap};
         var scrap_update = {$set : {'keyword1' : keyword1, 'keyword2' : keyword2, 'keyword3' : keyword3,
-            'path' : path_scrap, 'url':url, 'scrap_date' : dt, 'username' : user}};
+            'path' : path_scrap, 'url':url, 'scrap_date' : dt, '_username' : user}};
 
         var option = {upsert : true};
 
@@ -278,11 +278,11 @@ exports.ScrapCreate = function(req, res){
         var keyword_query2 = { path : path_keyword2 };
         var keyword_query3 = { path : path_keyword3 };
         var keyword_update1 = {$set : {keyword_name : keyword1, keyword_date : dt, path : path_keyword1,
-            parents_path : path_scrap, 'username' : user}};
+            parents_path : path_scrap, '_username' : user}};
         var keyword_update2 = {$set : {keyword_name : keyword2, keyword_date : dt, path : path_keyword2,
-            parents_path : path_scrap, 'username' : user}};
+            parents_path : path_scrap, '_username' : user}};
         var keyword_update3 = {$set : {keyword_name : keyword3, keyword_date : dt, path : path_keyword3,
-            parents_path : path_scrap, 'username' : user}};
+            parents_path : path_scrap, '_username' : user}};
 
 
         // 스크랩한 내용을 Scrap모델에 넣는다.
