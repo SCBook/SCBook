@@ -272,7 +272,7 @@ SCRAP.BRANCH.FlipViewList = function(x, y, z , rot) {
             group.add(flipView);
         }
 
-        group.children[0]._enable = true;
+        if(group.children[0]) group.children[0]._enable = true;
 
     }
 
@@ -1591,6 +1591,7 @@ SCRAP.BRANCH.progressBarView = function( ) {
     }
 
     group._start = function( words, weights ) {
+        for(var i=0; i<group.children.length; i++) delete group.children[i];
         group.children = [];
         for(var i=0; i<words.length; i++) {
             var progObj = new SCRAP.BRANCH.progressBarObject(words[i]+"("+weights[i]*100+"%)",weights[i]);
@@ -1743,8 +1744,9 @@ SCRAP.BRANCH.profileView = function( ) {
     }
 
     group._start = function( userData ) {
+
         group._username = userData.user;
-        group._children = [];
+        group.children = [];
 
         var picture = new SCRAP.BRANCH.pictureObject();
         group.add(picture);
@@ -1752,6 +1754,7 @@ SCRAP.BRANCH.profileView = function( ) {
         for(var i=0; i<3; i++) {
             var content = new SCRAP.BRANCH.contentObject();
             group.add(content);
+            console.log(userData);
             content._setText(userData[keys[i]]);
         }
         var back = new SCRAP.BRANCH.profileBackground();

@@ -51,6 +51,8 @@ exports.KeywordRead = function(req, res){
                     for(var j=0; j<independence; j++){
                         keyword_res[j].weight = keyword_res[j].weight/max;
                     }
+                    console.log('===== ks ======');
+                    console.log(keyword_res);
                     res.send(keyword_res);
                 }
             }
